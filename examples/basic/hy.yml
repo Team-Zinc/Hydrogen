@@ -1,0 +1,43 @@
+name: game
+desc: A simple game.
+authors: [Milo Banks, Eli Hatton]
+version:
+  - major: 0
+  - minor: 0
+  - patch: 1
+
+dependencies:
+  repo:
+    - glfw:
+      kind: staticlib
+      lang: c++
+
+      download:
+        vcs: git
+        at: glfw/glfw
+
+      build:
+        system: cmake
+
+      output:
+        out: &glfw_out $(^pwd)/glfw.a
+
+projects:
+  - catnet:
+    authors: [Milo Banks, Eli Hatton]
+    kind: console
+    version:
+      major: 0
+      minor: 0
+      patch: 1
+
+    depends: [repo:glfw]
+    files: [src/main.cpp]
+    links: [*glfw_out]
+
+extensions:
+  install_hook:
+    hook: hy:install_hook()
+
+  configuration_hook:
+    hook: hy:config_hook()
