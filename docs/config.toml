@@ -1,0 +1,17 @@
+baseURL = "http://example.org/"
+languageCode = "en-us"
+title = "Hydrogen Documentation"
+
+# Change the default theme
+theme = "hugo-theme-learn"
+
+# For search functionality
+[outputs]
+home = [ "HTML", "RSS", "JSON"]
+
+# Author of the site, will be used in meta information
+author = "Milo Banks"
+# Description of the site, will be used in meta information
+description = "Documentation for the Hydrogen build system"
+# Shows a checkmark for visited pages on the menu
+showVisitedLinks = true
