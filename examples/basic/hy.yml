@@ -1,6 +1,6 @@
 name: game
 desc: A simple game.
-authors: [Milo Banks, Eli Hatton]
+authors: [Milo Banks]
 version:
   - major: 0
   - minor: 0
@@ -8,7 +8,7 @@ version:
 
 projects:
   - catnet:
-    authors: [Milo Banks, Eli Hatton]
+    authors: [Milo Banks]
     kind: console
     version:
       major: 0
@@ -16,3 +16,4 @@ projects:
       patch: 1
 
     files: [src/main.cpp]
+
