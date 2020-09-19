@@ -1,19 +1,20 @@
-name: game
-desc: A simple game.
+name: bonjoura
+kind: console
+description: Hello worlds in different languages!
 authors: [Milo Banks]
 version:
-  - major: 0
-  - minor: 0
-  - patch: 1
+  major: 1
+  minor: 0
+  patch: 0
 
-projects:
-  - catnet:
-    authors: [Milo Banks]
-    kind: console
-    version:
-      major: 0
-      minor: 0
-      patch: 1
+local:
+  - location: src/hello
+  - location: src/hola
 
-    files: [src/main.cpp]
-
+external:
+  - name: glfw
+    language: C++
+    location: lib/glfw
+    build: CMake
+    from: glfw/glfw
+    vendor: Github

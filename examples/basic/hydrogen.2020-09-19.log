@@ -1,0 +1,17 @@
+[2020-09-19 11:40:13][hy::project][TRACE] Finding hy.yml....
+[2020-09-19 11:40:13][hy::project][DEBUG] Acceptable names: ["hy.yml"]
+[2020-09-19 11:40:13][hy::project][TRACE] Iterating over all files in current directory into Vector
+[2020-09-19 11:40:13][hy::project][DEBUG] Files in directory: ["hydrogen.2020-09-19.log", "hy.yml", "src"]
+[2020-09-19 11:40:13][hy::project][TRACE] Finding acceptable names in list of files concurrently
+[2020-09-19 11:40:13][hy::project][DEBUG] Matches: ["hy.yml"]
+[2020-09-19 11:40:13][hy::project][TRACE] Was a hy.yml matche found?
+[2020-09-19 11:40:13][hy::project][DEBUG] Parsing workspace config file hy.yml....
+[2020-09-19 11:40:13][hy::project::project][DEBUG] File contents:
+"name: bonjoura\nkind: console\ndescription: Hello worlds in different languages!\nauthors: [Milo Banks]\nversion:\n  major: 1\n  minor: 0\n  patch: 0\n\nlocal:\n  - location: src/hello\n  - location: src/hola\n\nexternal:\n  - name: glfw\n    language: C++\n    location: lib/glfw\n    build: CMake\n    from: glfw/glfw\n    vendor: Github\n"
+[2020-09-19 11:40:13][hy::project::project][DEBUG] Root project:
+Project { name: "bonjoura", description: "Hello worlds in different languages!", authors: ["Milo Banks"], kind: Some(Console), language: None, version: Version { major: 1, minor: 0, patch: 0 }, files: None, local: Some([Local { location: "src/hello" }, Local { location: "src/hola" }]), external: Some([External { name: "glfw", language: Cpp, location: "lib/glfw", build: CMake, from: "glfw/glfw", vendor: Github }]), contents: "" }
+[2020-09-19 11:40:13][hy::project::check][DEBUG] checking policy for bonjoura:1.0.0 ::: Name in camelCase or PascalCase? (Invalid name)
+[2020-09-19 11:40:13][hy::project::check][DEBUG] checking policy for bonjoura:1.0.0 ::: Is project name empty? (Empty Name)
+[2020-09-19 11:40:13][hy::project::check][DEBUG] checking policy for bonjoura:1.0.0 ::: Is project description empty? (Empty Description)
+[2020-09-19 11:40:13][hy::project::check][DEBUG] checking policy for bonjoura:1.0.0 ::: Are there any authors? (No authors)
+[2020-09-19 11:40:13][hy][TRACE] Exiting with code exitcode::OK (0)
