@@ -11,7 +11,7 @@ pub struct Policy<'a> {
     pub message: &'a str,
     pub example: PolicyExample<'a>,
 
-    pub valid: fn(&crate::Project) -> bool
+    // pub valid: fn(&crate::Project) -> bool
 }
 
 pub mod policies {

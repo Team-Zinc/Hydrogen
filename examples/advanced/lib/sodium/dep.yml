@@ -1,0 +1,8 @@
+name: sodium
+description: GLFW is a lightweight utility library for use with OpenGL.
+
+vendor: Github
+from: jedisct1/libsodium
+version: 1.0.18
+
+build: Custom

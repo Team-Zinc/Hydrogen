@@ -2,19 +2,17 @@ use snafu::Snafu;
 
 #[derive(Debug, Snafu)]
 pub enum ProjectError {
-    #[snafu(display("Hy.yml file at `{}` found to have invalid syntax (parse error): {}", path, source))]
+    #[snafu(display("Hy.yml esc file found to have invalid syntax (parse error): {}", source))]
     ParsingError {
         source: serde_yaml::Error,
-        path: Box<String>,
     },
 
-    #[snafu(display("Hy.yml file at `{}` was not readable: {}", path, source))]
+    #[snafu(display("Failed to read hy.yml esc file: {}", source))]
     ReadingError {
         source: std::io::Error,
-        path: Box<String>,
     },
 
-    #[snafu(display("Couldn't find hy.yml file: {}", reason))]
+    #[snafu(display("Couldn't find hy.yml esc file: {}", reason))]
     FindError {
         reason: Box<String>
     }

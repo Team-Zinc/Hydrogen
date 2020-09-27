@@ -1,0 +1,8 @@
+{
+    "cSpell.words": [
+        "nmake",
+        "openssl"
+    ],
+    "python.linting.enabled": false,
+    "editor.fontFamily": "Consolas, Monaco, 'Courier New', monospace"
+}

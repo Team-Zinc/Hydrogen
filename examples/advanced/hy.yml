@@ -1,0 +1,8 @@
+name: advanced
+kind: console
+description: An advanced program that needs a cryptography dependency.
+authors: [Milo Banks]
+version: 1.0.0
+
+dependencies:
+  - src

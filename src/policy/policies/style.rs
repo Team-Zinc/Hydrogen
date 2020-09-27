@@ -1,4 +1,4 @@
-use crate::project::project::Project;
+// use crate::project::project::Project;
 use inflections::case;
 
 pub const INVALID_NAME: super::super::Policy = super::super::Policy {
@@ -13,7 +13,7 @@ pub const INVALID_NAME: super::super::Policy = super::super::Policy {
         convert_examples: &[&["Kebabs-Yum", "KebabsYum"], &["gCc", "gcc"], &["CATnet", "CatNet"]],
     },
 
-    valid: |p: &Project| -> bool {
+    /* valid: |p: &Project| -> bool {
         case::is_camel_case(&p.name) || case::is_pascal_case(&p.name)
-    },
+    }, */
 };

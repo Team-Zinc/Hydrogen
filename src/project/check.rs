@@ -7,68 +7,53 @@ use console::style;
 use log::*;
 
 /// Check the Project struct for sanity
-pub fn check_hy<'a>(project: &'a Project) -> Vec<&'a Policy<'a>> {
-    let mut failed: Vec<&Policy> = Vec::new();
+pub fn check_and_print<'a>(/* project: &'a Project */) {
     let bar = ProgressBar::new_spinner();
 
     bar.set_prefix(&format!("{}", style("[***]").bold().dim()));
     for policy in policies::POLICIES.iter() {
-        debug!("checking policy for {} ::: {} ({})",
+        /* debug!("checking policy for {} ::: {} ({})",
             &project.get_full_name(),
             policy.description,
             policy.name
         );
 
         bar.set_message(&[
-            &project.get_full_name(),
-            " (",
-            &project.name,
-            ") ::: ",
+            &project.get_full_name(), " (",
+            &project.name, ") ::: ",
             policy.description]
-        .join(""));
+        .join("")); */
+
         bar.tick();
 
         // Why this weird syntax? See:
         // https://stackoverflow.com/questions/37370120/right-way-to-have-function-pointers-in-struct
         // Most likely, it's just a compiler oversight.
-
-        if (policy.valid)(project) == false {
+        /* if (policy.valid)(project) == false {
             error!("policy check failed for {} ::: {} ({})",
                 &project.get_full_name(),
                 policy.description,
                 policy.name
             );
             
-            failed.push(policy);
-        }
-
+            print_policy_failed(policy);
+        } */
     }
 
     bar.finish_and_clear();
-
-    failed
 }
 
-pub fn user_out<'a>(failed: Vec<&'a Policy<'a>>) {
-    if failed.len() == 0 {
+/// Here we output all the failed policies for the user to see.
+fn print_policy_failed(p: &Policy) {
+    if p.important {
+        eprintln!("{} {}: {}",
+            style("[!!!]").bold().red(), p.name, p.message
+        );
+
         return;
     }
-        
-    println!("{} Some errors/warnings where detected!",
-        style("[***]").bold().dim()
+
+    eprintln!("{} {}: {}",
+        style("[???]").bold().yellow(), p.name, p.message
     );
-
-    for policy in failed.iter() {
-        if policy.important {
-            println!("{} {}: {}",
-                style("[!!!]").bold().red(), policy.name, policy.message
-            );
-
-            continue;
-        }
-
-        println!("{} {}: {}",
-            style("[???]").bold().yellow(), policy.name, policy.message
-        );
-    }
 }

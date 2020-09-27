@@ -1,0 +1,5 @@
+name: openssl
+kind: Container
+description: OpenSSL is a TLS/SSL and crypto library.
+authors: [OpenSSL]
+version: OpenSSL_1_1_1h

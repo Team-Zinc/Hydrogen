@@ -3,16 +3,13 @@ mod logging;
 mod project;
 mod policy;
 
-use project::project::Project;
-use project::check;
-
 use structopt::StructOpt;
 use console::style;
 use log::*;
 
 fn main() {
     let opts = cli::Opts::from_args();
-    let mut root_project: Project = Project::new();
+    // let mut root_project: Project = Project::new();
 
     logging::init();
 
@@ -28,14 +25,13 @@ fn main() {
                 style("[***]").bold().dim()
             );
 
-            root_project = match project::find_and_parse() {
+            // Here we simply find the hy.yml file and parse it.
+            // This doesn't recurse between dependencies. That comes later.
+            /* root_project = match project::find_and_parse() {
                 Ok(p) => p,
                 Err(e) => {
-                    println!("{} Failed to preform configuration: a parse error was encountered!",
-                        style("[!!!]").bold().red()
-                    );
-
-                    println!("{} {}",
+                    println!("{} Failed to preform configuration: a parse error was encountered!\n{} {}",
+                        style("[!!!]").bold().red(),
                         style("[!!!]").bold().red(), e
                     );
 
@@ -46,10 +42,14 @@ fn main() {
 
             println!("{} Checking Configuration....",
                 style("[***]").bold().dim()
-            );
-            check::user_out(check::check_hy(&root_project));
+            ); */
+
+            // Check the hy.yml file and output the failures.
+            // This function checks a lot of things for us, but it
+            // doesn't check things like referenced local hy.yml
+            // project existence.
         },
-    }
+    };
 
     // Exit successfully
     log::trace!("Exiting with code exitcode::OK ({})", exitcode::OK);
