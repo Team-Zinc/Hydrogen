@@ -32,7 +32,7 @@ pub enum Subcommand {
 
     },
 
-    #[structopt(about = "Build the application", aliases = &["Compile", "Make"])]
+    #[structopt(about = "Build the application", aliases = &["Compile", "Make", "Plz"])]
     Build {
 
     },

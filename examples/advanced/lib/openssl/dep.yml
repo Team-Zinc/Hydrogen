@@ -1,8 +1,0 @@
-name: openssl
-description: GLFW is a lightweight utility library for use with OpenGL.
-
-vendor: Github
-from: openssl/openssl
-version: OpenSSL_1_1_1h
-
-build: Custom

@@ -1,99 +1,73 @@
-pub mod hy;
-pub mod dep;
-pub mod py;
-pub mod project_error;
-pub mod types;
-pub mod dependency;
+pub mod layout;
 
-use hy::Hy;
-use dep::Dep;
-use console::style;
-use dependency::DependencyDeclaration;
-use project_error::ProjectError;
-use std::path::Path;
+use layout::Layout;
 use std::fs;
-use std::borrow::Borrow;
-use serde::Deserialize;
+use std::path::Path;
 
-// A project is a container that contains a hy.yml, hy.py, and a dep.yml
-#[derive(Deserialize, Debug)]
+const META_FILE_NAME: &str = "hy.yml";
+const FETCH_FILE_NAME: &str = "dep.yml";
+const DYNAMIC_FILE_NAME: &str = "hy.py";
+
+/// A project is simply a container for a
+/// metadata and static actual file (hy.yml),
+/// a dependency declaration file (fetch.yml, optional),
+/// and a dynamic actual file (hy.py, optional).
+/// 
+/// Please note the dynamic actual files are not yet implemented.
+#[derive(Debug)]
 pub struct Project {
-    pub hy: Hy,
-    pub dep: Option<Dep>,
-    // TODO: PYTHON INTEGRATION
+    pub layout: Layout,
+
+    meta_src: Option<String>,
+    fetch_src: Option<String>,
+    dynamic_src: Option<String>,
 }
 
 impl Project {
-    pub fn new_root() -> Self {
-        Self {
-            hy: Hy::new(),
-            dep: None,
-        }
-    }
-
     pub fn new() -> Self {
-        Project::new_root()
+        Self {
+            layout: Layout::new(),
+            meta_src: None,
+            fetch_src: None,
+            dynamic_src: None,
+        }
     }
-    
-    pub fn walk_dependencies(&self) -> Result<Vec<Self>, ProjectError> {
-        let mut walked_dependencies: Vec<Self> = Vec::new();
-        let dependencies = match &self.hy.dependencies {
-            Some(d) => d,
-            None => return Ok(vec![]),
-        };
-        
-        for dependency in dependencies {
-             // Here we look for and parse where the current Project Dependency Declaration is pointing to.
-            let mut dependency_as_project = Project::new();
-            let at: String = dependency.at.clone() + &"/hy.yml".to_owned();
-            let walked: Vec<Self>;
-            
-            if ! Path::new(&at).exists() {
-                /* println!("{} Failed to find dependency at {} (required by {})!",
-                    style("[!!!]").bold().red(),
-                    &at, self.hy.get_pretty()
-                ); */
 
-                return Err(ProjectError::FindError {
-                    reason: Box::from(format!("failed to find dependency at {} (required by {})!",
-                    &at, self.hy.get_pretty()))
-                });
-            }
-
-            dependency_as_project = dependency_as_project.parse_from_str(match &fs::read_to_string(&at) {
-                Ok(s) => s,
-                Err(e) => return Err(ProjectError::ReadingError {
-                    source: e,
-                    reason: Box::from(format!("failed to read dependency file at {} (required by {})!",
-                    &at, self.hy.get_pretty()))
-                }),
-            })?;
-            walked_dependencies.append(&mut dependency_as_project.walk_dependencies()?);
-
-            // Now we walk that and append to our walked_dependencies
+    /// Looks for a project in the current directory.
+    pub fn look_for(&mut self) {
+        if Path::new(META_FILE_NAME).exists() {
+            self.layout.has_meta = true;
         }
 
-        Ok(walked_dependencies)
+        if Path::new(FETCH_FILE_NAME).exists() {
+            self.layout.has_fetch = true;
+        }
+
+        if Path::new(DYNAMIC_FILE_NAME).exists() {
+            self.layout.has_dynamic = true;
+        }
     }
 
-    pub fn parse_from_str<'a>(&self, s: &str) -> Result<Project, ProjectError> {
-        let p: Project = match serde_yaml::from_str(s) {
-            Ok(s) => s,
-            Err(e) => {
-                return Err(ProjectError::ParsingError {
-                    source: e,
-                });
-            }
-        };
+    /// Reads all the project specific files. Gets data from layout.
+    pub fn read_all(&mut self) -> Result<(), std::io::Error> {
+        if self.layout.has_meta {
+            self.meta_src = Some(fs::read_to_string(META_FILE_NAME)?);
+        }
 
-        Ok(p)
-    }
-}
+        if self.layout.has_fetch {
+            self.meta_src = Some(fs::read_to_string(FETCH_FILE_NAME)?);
+        }
 
-pub fn find_root<'a>() -> Option<&'a str> {
-    if ! Path::new("./hy.yml").exists() {
-        return None;
+        if self.layout.has_dynamic {
+            self.meta_src = Some(fs::read_to_string(DYNAMIC_FILE_NAME)?);
+        }
+
+        Ok(())
     }
 
-    Some("hy.yml")
+    /// This function simply calls the parse functions
+    /// for meta and fetchfile, and (TODO) runs the dynamic.
+    pub fn parse_all(&self) {
+
+    }
 }
