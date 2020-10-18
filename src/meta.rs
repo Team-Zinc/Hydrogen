@@ -1,3 +1,5 @@
+pub mod parse;
+
 use serde::{Serialize, Deserialize};
 
 /// Metadata (located in hy.yml) describes
@@ -11,5 +13,15 @@ pub struct Meta {
     description: String,
     authors: Vec<String>,
     version: String,
-    // dependencies: Vec<Dependency>,
+}
+
+impl Meta {
+    pub fn new() -> Self {
+        Self {
+            name: "".into(),
+            description: "".into(),
+            authors: vec![],
+            version: "".into(),
+        }
+    }
 }

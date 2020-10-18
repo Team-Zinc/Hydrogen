@@ -1,11 +1,13 @@
 mod cli;
 mod logging;
 mod project;
+mod meta;
 
 use log::*;
 use project::Project;
 use structopt::StructOpt;
 
+/// Entry point.
 fn main() {
     // Init stuff
     // Parse Options

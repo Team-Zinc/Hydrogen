@@ -1,0 +1,4 @@
+name: hello
+description: A program that says "Hello!" in English.
+authors: [Milo Banks]
+version: 1.0.0

@@ -1,4 +1,5 @@
-pub fn get_file_config() -> fern::Dispatch {
+/// Set up a fern dispatch logger.
+pub fn get_dispatch() -> fern::Dispatch {
     fern::Dispatch::new()
         .format(move |out, message, record| {
             out.finish(format_args!(
