@@ -2,6 +2,7 @@ mod cli;
 mod logging;
 mod project;
 mod meta;
+#[macro_use] mod util;
 
 use log::*;
 use project::Project;
@@ -33,10 +34,17 @@ fn main() {
 
             println!("{:?}", root); // FIXME: REMOVE
 
+            tell_info!("Parsing everything for your convenience....");
             // Parse root
+            root.parse_all();
 
+            tell_info!("Recursing over all dependencies just for you!");
             // Recurse and parse
+
+            tell_info!("Building all of it because I'm nice like that....");
             // Build
+
+            tell_success!("Done! Everything should be built! Check above just in case.");
         },
     };
 }

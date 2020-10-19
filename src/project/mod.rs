@@ -1,5 +1,8 @@
+pub mod parse;
+pub mod kinds;
+
 use crate::meta::Meta;
-use crate::meta::parse;
+use crate::project::parse::Parse;
 use std::fs;
 use std::path::Path;
 
@@ -88,10 +91,10 @@ impl Project {
 
     /// This function simply calls the parse functions
     /// for meta and fetchfile, and (maybe, TODO) runs the dynamic.
-    pub fn parse_all(&mut self) {
+    pub fn parse_all(&mut self) -> Result<(), serde_yaml::Error> {
         if self.meta_src.is_some() {
             // Parse the meta source
-            
+            self.meta.from_string(self.meta_src.as_ref().unwrap())?;
         }
 
         if self.fetch_src.is_some() {
@@ -101,5 +104,7 @@ impl Project {
         if self.static_src.is_some() {
             // Parse the static actual source
         }
+
+        Ok(())
     }
 }
