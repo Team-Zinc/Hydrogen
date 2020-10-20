@@ -1,5 +1,6 @@
 pub mod parse;
 pub mod kinds;
+pub mod error;
 
 use crate::meta::Meta;
 use crate::project::parse::Parse;

@@ -1,8 +1,8 @@
+#[macro_use] mod util;
 mod cli;
 mod logging;
 mod project;
 mod meta;
-#[macro_use] mod util;
 
 use log::*;
 use project::Project;
