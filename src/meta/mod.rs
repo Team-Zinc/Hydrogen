@@ -1,5 +1,9 @@
-use serde::{Serialize, Deserialize};
 use crate::project::{parse::Parse, kinds::{Language, Type}};
+use crate::project::project_error::ProjectError;
+use crate::project::project_error;
+
+use snafu::{ResultExt, Snafu};
+use serde::{Serialize, Deserialize};
 
 /// Metadata (located in hy.yml) describes
 /// certain data about the project (like names and authors).
@@ -32,8 +36,20 @@ impl Meta {
 }
 
 impl Parse for Meta {
-    fn from_string(&mut self, src: &str) -> Result<(), serde_yaml::Error> {
-        *self = serde_yaml::from_str(src)?;
+    fn from_string(&mut self, src: &str) -> Result<(), ProjectError> {
+        /* *self = serde_yaml::from_str(src).context(
+            project_error::ParseFile {
+                path: "<TODO: PATH>".to_owned()
+            }
+        )?; */
+
+        let p: Meta = match serde_yaml::from_str(src) {
+            Ok(m) => m,
+            Err(e) => {
+                println!("{:?}", e);
+                std::process::exit(1);
+            }
+        };
         
         Ok(())
     }

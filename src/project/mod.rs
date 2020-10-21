@@ -1,11 +1,14 @@
 pub mod parse;
 pub mod kinds;
-pub mod error;
+pub mod project_error;
 
 use crate::meta::Meta;
+use crate::project::project_error::ProjectError;
 use crate::project::parse::Parse;
+
 use std::fs;
 use std::path::Path;
+use std::error::Error;
 
 // TODO: Make file name "prettier"
 /// Where to look for the meta file.
@@ -92,7 +95,7 @@ impl Project {
 
     /// This function simply calls the parse functions
     /// for meta and fetchfile, and (maybe, TODO) runs the dynamic.
-    pub fn parse_all(&mut self) -> Result<(), serde_yaml::Error> {
+    pub fn parse_all(&mut self) -> Result<(), ProjectError> {
         if self.meta_src.is_some() {
             // Parse the meta source
             self.meta.from_string(self.meta_src.as_ref().unwrap())?;

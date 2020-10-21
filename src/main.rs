@@ -32,8 +32,6 @@ fn main() {
                 Ok(v) => v,
             };
 
-            println!("{:?}", root); // FIXME: REMOVE
-
             tell_info!("Parsing everything for your convenience....");
             // Parse root
             root.parse_all();
@@ -45,6 +43,8 @@ fn main() {
             // Build
 
             tell_success!("Done! Everything should be built! Check above just in case.");
+
+            println!("{:?}", root); // FIXME: REMOVE
         },
     };
 }

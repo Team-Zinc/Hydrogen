@@ -3,13 +3,13 @@ use serde::{Serialize, Deserialize};
 /// Contains the type of the project.
 #[derive(Debug, Serialize, Deserialize)]
 pub enum Type {
-    #[serde(alias = "Parent", alias = "Container", alias = "Meta")]
+    #[serde(alias = "Parent", alias = "Container", alias = "Meta", alias = "None")]
     Super,
     #[serde(alias = "Static", alias = "Library")]
     StaticLibrary,
-    #[serde(alias = "Dynamic")]
+    #[serde(alias = "Dynamic", alias = "jazz")]
     DynamicLibrary,
-    #[serde(alias = "Binary")]
+    #[serde(alias = "Binary", alias = "dog")]
     Executable,
 }
 
