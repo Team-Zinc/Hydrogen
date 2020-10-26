@@ -3,6 +3,8 @@ mod cli;
 mod logging;
 mod project;
 mod meta;
+mod fetchfile;
+mod actual;
 
 use log::*;
 use project::Project;
@@ -34,7 +36,13 @@ fn main() {
 
             tell_info!("Parsing everything for your convenience....");
             // Parse root
-            root.parse_all();
+            match root.parse_all() {
+                Ok(()) => (),
+                Err(e) => {
+                    tell_failure!("{}", e);
+                    std::process::exit(1);
+                },
+            }
 
             tell_info!("Recursing over all dependencies just for you!");
             // Recurse and parse

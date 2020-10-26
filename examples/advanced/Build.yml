@@ -1,8 +1,9 @@
 dependencies:
   - name: hello
-    type: local
     at: src/hello
   
   - name: hola
-    type: local
     at: src/hola
+
+  - name: documentation
+    at: docs

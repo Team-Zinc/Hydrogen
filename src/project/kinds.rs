@@ -2,7 +2,7 @@ use serde::{Serialize, Deserialize};
 
 /// Contains the type of the project.
 #[derive(Debug, Serialize, Deserialize)]
-pub enum Type {
+pub enum Type { // TODO: Rename to something like ProjectType 
     #[serde(alias = "Parent", alias = "Container", alias = "Meta", alias = "None")]
     Super,
     #[serde(alias = "Static", alias = "Library")]
@@ -22,6 +22,17 @@ pub enum Language {
     #[serde(rename = "C++")]
     Cpp,
     None,
+}
+
+/// Where to download software from.
+/// Supports:
+///     1. Github
+///     2. Git from URL (TODO)
+///     3. .tar(.gz) (TODO)
+#[derive(Debug, Serialize, Deserialize)]
+pub enum Vendor {
+    #[serde(alias = "Github")]
+    GitHub
 }
 
 impl Default for Type {

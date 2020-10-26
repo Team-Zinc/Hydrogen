@@ -1,6 +1,7 @@
-use crate::project::{parse::Parse, kinds::Vendor};
+use crate::project::parse::Parse;
 use crate::project::project_error::{ProjectError};
 use crate::project::project_error;
+use super::dependency::Dependency;
 
 use snafu::{ResultExt};
 use serde::{Serialize, Deserialize};
@@ -8,21 +9,21 @@ use serde::{Serialize, Deserialize};
 // where and how to download a dependency.
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Fetchfile {
-    vendor: Vendor,
-    from: String
+pub struct StaticActual {
+    files: Option<Vec<String>>,
+    dependencies: Option<Vec<Dependency>>,
 }
 
-impl Fetchfile {
+impl StaticActual {
     pub fn new() -> Self {
         Self {
-            vendor: Vendor::GitHub,
-            from: "".into(),
+            files: None,
+            dependencies: None,
         }
     }
 }
 
-impl Parse for Fetchfile {
+impl Parse for StaticActual {
     fn from_string(&mut self, src: &str) -> Result<(), ProjectError> {
         *self = serde_yaml::from_str(src).context(
             project_error::ParseFile {

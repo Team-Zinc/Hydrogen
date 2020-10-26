@@ -1,8 +1,8 @@
 use crate::project::{parse::Parse, kinds::{Language, Type}};
-use crate::project::project_error::ProjectError;
+use crate::project::project_error::{ProjectError};
 use crate::project::project_error;
 
-use snafu::{ResultExt, Snafu};
+use snafu::{ResultExt};
 use serde::{Serialize, Deserialize};
 
 /// Metadata (located in hy.yml) describes
@@ -37,19 +37,19 @@ impl Meta {
 
 impl Parse for Meta {
     fn from_string(&mut self, src: &str) -> Result<(), ProjectError> {
-        /* *self = serde_yaml::from_str(src).context(
+        *self = serde_yaml::from_str(src).context(
             project_error::ParseFile {
-                path: "<TODO: PATH>".to_owned()
+                filetype: "meta",
             }
-        )?; */
+        )?;
 
-        let p: Meta = match serde_yaml::from_str(src) {
+        /* let p: Meta = match serde_yaml::from_str(src) {
             Ok(m) => m,
             Err(e) => {
                 println!("{:?}", e);
                 std::process::exit(1);
             }
-        };
+        }; */ 
         
         Ok(())
     }

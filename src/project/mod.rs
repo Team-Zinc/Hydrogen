@@ -3,11 +3,14 @@ pub mod kinds;
 pub mod project_error;
 
 use crate::meta::Meta;
+use crate::fetchfile::Fetchfile;
+use crate::actual::{static_actual::StaticActual};
 use crate::project::project_error::ProjectError;
 use crate::project::parse::Parse;
 
 use std::fs;
 use std::path::Path;
+use std::env;
 use std::error::Error;
 
 // TODO: Make file name "prettier"
@@ -39,6 +42,8 @@ pub struct Project {
     dynamic_src: Option<String>,
 
     pub meta: Meta,
+    pub fetchfile: Fetchfile,
+    pub static_actual: StaticActual,
 }
 
 impl Project {
@@ -50,6 +55,8 @@ impl Project {
             dynamic_src: None,
 
             meta: Meta::new(),
+            fetchfile: Fetchfile::new(),
+            static_actual: StaticActual::new(),
         }
     }
 
@@ -103,11 +110,15 @@ impl Project {
 
         if self.fetch_src.is_some() {
             // Parse the fetch source
+            self.fetchfile.from_string(self.meta_src.as_ref().unwrap())?;
         }
 
         if self.static_src.is_some() {
             // Parse the static actual source
+            self.static_actual.from_string(self.static_src.as_ref().unwrap())?;
         }
+
+        // TODO: Run dynamic configuration
 
         Ok(())
     }
