@@ -5,10 +5,12 @@ mod project;
 mod meta;
 mod fetchfile;
 mod actual;
+mod cats; // I challenge you to explore.....
 
 use log::*;
 use project::Project;
 use structopt::StructOpt;
+use rand::seq::SliceRandom;
 
 /// Entry point.
 fn main() {
@@ -54,5 +56,10 @@ fn main() {
 
             println!("{:?}", root); // FIXME: REMOVE
         },
+
+        cli::Subcommand::Catz{} => {
+            let cat: Vec<_> = cats::CATS.choose_multiple(&mut rand::thread_rng(), 1).collect();
+            println!("\n{}", cat.get(0).unwrap());
+        }
     };
 }

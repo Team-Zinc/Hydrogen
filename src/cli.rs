@@ -1,4 +1,5 @@
 use structopt::StructOpt;
+use structopt::clap::AppSettings;
 
 /*
  * https://stackoverflow.com/questions/50673567/how-to-use-an-enum-that-represents-subcommands-with-structopt
@@ -27,13 +28,18 @@ impl Opts {
 #[derive(StructOpt, Debug)]
 #[structopt(name = "hy")]
 pub enum Subcommand {
-    #[structopt(about = "Get help", aliases = &["Halp", "Usage"])]
+    #[structopt(about = "Get help", aliases = &["halp", "usage"])]
     Help {
 
     },
 
-    #[structopt(about = "Build the application", aliases = &["Compile", "Make", "Plz"])]
+    #[structopt(about = "Build the application", aliases = &["compile", "make", "plz"])]
     Build {
 
+    },
+
+    #[structopt(setting = AppSettings::Hidden, aliases = &["cat", "cats"])]
+    Catz {
+        
     },
 }

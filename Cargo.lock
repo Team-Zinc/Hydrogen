@@ -273,6 +273,7 @@ dependencies = [
  "indicatif",
  "inflections",
  "log",
+ "rand",
  "rayon",
  "serde",
  "serde_yaml",
