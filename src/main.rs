@@ -5,14 +5,15 @@ mod project;
 mod meta;
 mod fetchfile;
 mod actual;
-mod cats; // I challenge you to explore.....
+mod cats; // I challenge you to explore..... 
 
 use log::*;
 use project::Project;
 use structopt::StructOpt;
 use rand::seq::SliceRandom;
+use actual::{real_actual::RealActual, static_actual::StaticActual};
 
-/// Entry point.
+/// Entry point. 
 fn main() {
     // Init stuff
     // Parse Options
@@ -30,31 +31,36 @@ fn main() {
         cli::Subcommand::Build{} => {
             // Look for root project.
             let mut root: Project = Project::new();
-            root.look_for();
             match root.read_all() {
                 Err(e) => eprintln!("{}", e),
                 Ok(v) => v,
             };
 
-            tell_info!("Parsing everything for your convenience....");
-            // Parse root
+            tell_info!("Recursing and parsing over everything just for you!");
+            // Parse the base.
             match root.parse_all() {
                 Ok(()) => (),
-                Err(e) => {
+                Err(e) => { 
                     tell_failure!("{}", e);
                     std::process::exit(1);
                 },
+            };
+
+            // Contruct the base actual from a static actual, if one exists.
+            // Please note that this consumes static_actual with take().
+            if root.static_actual.is_some() {
+                root.static_to_real();
             }
 
-            tell_info!("Recursing over all dependencies just for you!");
             // Recurse and parse
+            
 
             tell_info!("Building all of it because I'm nice like that....");
             // Build
 
-            tell_success!("Done! Everything should be built! Check above just in case.");
+            tell_success!("Done! Everything should be built! Check above just in case of hisses.");
 
-            println!("{:?}", root); // FIXME: REMOVE
+            println!("{}", serde_yaml::to_string(&root).unwrap()); // FIXME: REMOVE
         },
 
         cli::Subcommand::Catz{} => {

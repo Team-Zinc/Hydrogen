@@ -4,16 +4,16 @@ pub mod project_error;
 
 use crate::meta::Meta;
 use crate::fetchfile::Fetchfile;
-use crate::actual::{static_actual::StaticActual};
-use crate::project::project_error::ProjectError;
-use crate::project::parse::Parse;
+use crate::actual::{static_actual::StaticActual, real_actual::RealActual};
+// use crate::project::project_error::ProjectError;
+// use crate::project::parse::Parse;
 
 use std::fs;
 use std::path::Path;
-use std::env;
-use std::error::Error;
 
-// TODO: Make file name "prettier"
+use serde::{Serialize, Deserialize}; 
+
+// TODO: Make file names "prettier"
 /// Where to look for the meta file.
 const META_FILE: &str = "Hydrogen.yml";
 /// Where to look for the fetch file.
@@ -21,7 +21,18 @@ const FETCH_FILE: &str = "Fetch.yml";
 /// Where to look for the static actual file.
 const STATIC_BUILD_FILE: &str = "Build.yml";
 /// Where to look for the dynamic actual file.
-const DYNAMIC_BUILD_FILE: &str = "Build.py";
+// const DYNAMIC_BUILD_FILE: &str = "Build.py";
+
+/// A templated generic struct for
+/// holding sources and the actual
+/// struct on an element.
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ProjectElement<T> {
+    /// An element is simple a struct like Meta or StaticActual.
+    pub element: T,
+    /// The source of the element.
+    pub src: String,
+}
 
 /// A project is simply a container for a
 /// metadata file (Hydrogen.yml),
@@ -29,97 +40,64 @@ const DYNAMIC_BUILD_FILE: &str = "Build.py";
 /// a static actual file (Build.yml)
 /// and a dynamic actual file (Build.py).
 /// 
-/// # NOTE:
-/// If a file is found, the corresponding
-/// source field is set to Some from None
-/// 
 /// Please note the dynamic actual files are not yet implemented.
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Project {
-    meta_src: Option<String>,
-    fetch_src: Option<String>,
-    static_src: Option<String>,
-    dynamic_src: Option<String>,
-
-    pub meta: Meta,
-    pub fetchfile: Fetchfile,
-    pub static_actual: StaticActual,
+    pub meta: Option<Box<ProjectElement<Meta>>>,
+    pub fetchfile: Option<Box<ProjectElement<Fetchfile>>>,
+    pub static_actual: Option<Box<ProjectElement<StaticActual>>>,
+    pub real_actual: Option<Box<RealActual>>,
 }
 
 impl Project {
     pub fn new() -> Self {
         Self {
-            meta_src: None,
-            fetch_src: None,
-            static_src: None,
-            dynamic_src: None,
-
-            meta: Meta::new(),
-            fetchfile: Fetchfile::new(),
-            static_actual: StaticActual::new(),
+            meta: None,
+            fetchfile: None,
+            static_actual: None,
+            real_actual: None,
         }
     }
 
-    /// Looks for a project in the current directory.
-    pub fn look_for(&mut self) {
+    /// Looks for a project in the current directory, and
+    /// read it if it exists.
+    pub fn read_all(&mut self) -> Result<(), std::io::Error> {
         if Path::new(META_FILE).exists() {
-            self.meta_src = Some(String::new());
+            self.meta = Some(Box::from(ProjectElement{
+                element: Meta::new(),
+                src: fs::read_to_string(META_FILE)?,
+            }));
         }
 
         if Path::new(FETCH_FILE).exists() {
-            self.fetch_src = Some(String::new());
+            self.fetchfile = Some(Box::from(ProjectElement{
+                element: Fetchfile::new(),
+                src: fs::read_to_string(FETCH_FILE)?,
+            }));
         }
 
         if Path::new(STATIC_BUILD_FILE).exists() {
-            self.static_src = Some(String::new());
-        }
-
-        if Path::new(DYNAMIC_BUILD_FILE).exists() {
-            self.dynamic_src = Some(String::new());
-        }
-    }
-
-    /// Reads all the project specific files. Gets data from layout.
-    pub fn read_all(&mut self) -> Result<(), std::io::Error> {
-        if self.meta_src.is_some() {
-            self.meta_src = Some(fs::read_to_string(META_FILE)?);
-        }
-
-        if self.fetch_src.is_some() {
-            self.fetch_src = Some(fs::read_to_string(FETCH_FILE)?);
-        }
-
-        if self.static_src.is_some() {
-            self.static_src = Some(fs::read_to_string(STATIC_BUILD_FILE)?)
-        }
-
-        if self.dynamic_src.is_some() {
-            self.dynamic_src = Some(fs::read_to_string(DYNAMIC_BUILD_FILE)?);
+            self.static_actual = Some(Box::from(ProjectElement{
+                element: StaticActual::new(),
+                src: fs::read_to_string(STATIC_BUILD_FILE)?,
+            }));
         }
 
         Ok(())
     }
 
-    /// This function simply calls the parse functions
-    /// for meta and fetchfile, and (maybe, TODO) runs the dynamic.
-    pub fn parse_all(&mut self) -> Result<(), ProjectError> {
-        if self.meta_src.is_some() {
-            // Parse the meta source
-            self.meta.from_string(self.meta_src.as_ref().unwrap())?;
-        }
+    /// # NOT IMPLEMENTED
+    /// Constructs a RealActual from a DynamicActual.
+    /// Consumes the dynamic actual.
+    pub fn apply_dynamic_to_real(&mut self) {
+        panic!("NOT IMPLEMENTED: apply_dynamic: RealActual");
+    }
 
-        if self.fetch_src.is_some() {
-            // Parse the fetch source
-            self.fetchfile.from_string(self.meta_src.as_ref().unwrap())?;
-        }
-
-        if self.static_src.is_some() {
-            // Parse the static actual source
-            self.static_actual.from_string(self.static_src.as_ref().unwrap())?;
-        }
-
-        // TODO: Run dynamic configuration
-
-        Ok(())
+    /// Constructs a RealActual from a StaticActual.
+    /// Consumes the static actual.
+    pub fn static_to_real(&mut self) {
+        let mut r = RealActual::new();
+        r.from_static(self.static_actual.take().unwrap().element); 
+        self.real_actual = Some(Box::from(r));
     }
 }

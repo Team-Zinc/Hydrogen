@@ -1,9 +1,12 @@
 {
     "cSpell.words": [
+        "Contruct",
         "Isacc",
         "NOINPUT",
         "actuals",
+        "bincode",
         "exitcode",
+        "fasthash",
         "thiserror"
     ],
     "git.ignoreLimitWarning": true

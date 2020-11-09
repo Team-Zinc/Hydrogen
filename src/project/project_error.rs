@@ -10,7 +10,7 @@ pub enum ProjectError {
         path: String
     },
 
-    #[snafu(display("Unable to parse configuration from {}:\n{}", filetype, source))]
+    #[snafu(display("Unable to parse configuration from {}: {}", filetype, source))]
     ParseFile {
         #[snafu(source(from(serde_yaml::Error, Box::new)))]
         source: Box<serde_yaml::Error>,

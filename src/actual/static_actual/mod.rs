@@ -10,8 +10,8 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct StaticActual {
-    files: Option<Vec<String>>,
-    dependencies: Option<Vec<Dependency>>,
+    pub files: Option<Vec<String>>,
+    pub dependencies: Option<Vec<Dependency>>,
 }
 
 impl StaticActual {
