@@ -1,0 +1,9 @@
+dependencies:
+  - name: hello
+    at: src/hello
+  
+  - name: hola
+    at: src/hola
+
+  - name: documentation
+    at: docs

@@ -1,7 +1,0 @@
-name: sodium
-kind: Container
-description: A modern, portable, easy to use crypto library. 
-authors: [Frank Denis]
-version: 1.0.18
-
-build: Unknown

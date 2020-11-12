@@ -1,10 +1,16 @@
 {
     "cSpell.words": [
-        "Gitlab",
-        "Hatton",
-        "beanz",
+        "Contruct",
+        "Isacc",
+        "NOINPUT",
+        "actuals",
+        "bincode",
+        "canonicalize",
+        "deps",
         "exitcode",
-        "libglfw",
-        "topo"
-    ]
+        "fasthash",
+        "structopt",
+        "thiserror"
+    ],
+    "git.ignoreLimitWarning": true
 }

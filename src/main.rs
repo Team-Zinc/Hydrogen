@@ -1,89 +1,78 @@
+#[macro_use] mod util;
 mod cli;
 mod logging;
 mod project;
-mod policy;
+mod meta;
+mod fetchfile;
+mod actual;
+mod cats; // I challenge you to explore..... 
 
-use project::Project;
-use project::hy::Hy;
-use structopt::StructOpt;
-use console::style;
 use log::*;
+use project::Project;
+use structopt::StructOpt;
+use rand::seq::SliceRandom;
 
+/// Entry point. 
 fn main() {
+    // Init stuff
+    // Parse Options
     let opts = cli::Opts::from_args();
-    let mut root_project: Project = Project::new_root();
-
     logging::init();
 
     match opts.get_command() {
         cli::Subcommand::Help{} => {
-            eprintln!("Please use the --help flag with not sub-command for help!");
+            tell_error!("Please use the --help flag with not sub-command for help!");
             trace!("Exiting with error code exitcode::NOINPUT ({})", exitcode::NOINPUT);
             std::process::exit(exitcode::NOINPUT);
         },
 
+
         cli::Subcommand::Build{} => {
-            println!("{} Preforming configuration on root....",
-                style("[***]").bold().dim()
-            );
+            // Look for root project.
+            let mut root: Project = Project::new();
+            match root.read_all() {
+                Ok(()) => (),
+                Err(e) => { 
+                    tell_failure!("{}", e);
+                    std::process::exit(1);
+                },
+            };
 
-            // We must guarantee a hy.yml file in the current directory.
-            if project::find_root().is_none() {
-                println!("{} Failed to find a hy.yml configuration file in the current directory!",
-                    style("[!!!]").bold().red()
-                );
+            tell_info!("Recursing and parsing over everything just for you!");
+            // Parse the base.
+            match root.parse_all() {
+                Ok(()) => (),
+                Err(e) => { 
+                    tell_failure!("{}", e);
+                    std::process::exit(1);
+                },
+            };
 
-                std::process::exit(1);
+            // Contruct the base actual from a static actual, if one exists.
+            // Please note that this consumes static_actual with take().
+            // Also, we should parse it too.
+            if root.static_actual.is_some() {
+                root.construct_real_actual();
+                match root.parse_all_children() {
+                    Ok(()) => (),
+                    Err(e) => { 
+                        tell_failure!("{}", e);
+                        std::process::exit(1);
+                    },
+                };
             }
 
-            // Now we just parse.
-            // We know there is a hy.yml, so we parse it.
-            println!("{} Parsing root....",
-                style("[***]").bold().dim()
-            );
+            tell_info!("Building all of it because I'm nice like that....");
+            // Build
 
-            root_project.hy = match Hy::parse_from_file("hy.yml".to_owned()) {
-                Ok(h) => h,
-                Err(e) => {
-                    println!("{} Failed to parse root: a parse error was encountered!\n{} {}",
-                        style("[!!!]").bold().red(),
-                        style("[!!!]").bold().red(), e
-                    );
+            tell_success!("Done! Everything should be built! Check above just in case of hisses.");
 
-                    std::process::exit(-1);
-                }
-            };
-
-            // Now we look for wanted dependencies, find their dependencies, and so on.
-            println!("{:?}", root_project.walk_dependencies());
-
-            // Here we simply find the hy.yml file and parse it.
-            // This doesn't recurse between dependencies. That comes later.
-            /* root_project = match project::find_and_parse() {
-                Ok(p) => p,
-                Err(e) => {
-                    println!("{} Failed to preform configuration: a parse error was encountered!\n{} {}",
-                        style("[!!!]").bold().red(),
-                        style("[!!!]").bold().red(), e
-                    );
-
-                    log::trace!("Exiting with code exitcode::OK ({})", exitcode::OK);
-                    std::process::exit(-1);
-                }
-            };
-
-            println!("{} Checking Configuration....",
-                style("[***]").bold().dim()
-            ); */
-
-            // Check the hy.yml file and output the failures.
-            // This function checks a lot of things for us, but it
-            // doesn't check things like referenced local hy.yml
-            // project existence.
+            println!("{}", serde_json::to_string_pretty(&root).unwrap()); // FIXME: REMOVE
         },
-    };
 
-    // Exit successfully
-    log::trace!("Exiting with code exitcode::OK ({})", exitcode::OK);
-    std::process::exit(0);
+        cli::Subcommand::Catz{} => {
+            let cat: Vec<_> = cats::CATS.choose_multiple(&mut rand::thread_rng(), 1).collect();
+            println!("\n{}", cat.get(0).unwrap());
+        }
+    };
 }

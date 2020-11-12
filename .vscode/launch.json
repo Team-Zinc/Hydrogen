@@ -19,8 +19,8 @@
                     "kind": "bin"
                 }
             },
-            "args": ["build"],
-            "cwd": "${workspaceFolder}/examples/basic"
+            "args": ["plz"],
+            "cwd": "${workspaceFolder}/examples/advanced"
         },
         {
             "type": "lldb",
@@ -38,8 +38,8 @@
                     "kind": "bin"
                 }
             },
-            "args": ["build"],
-            "cwd": "${workspaceFolder}/examples/basic"
+            "args": [],
+            "cwd": "${workspaceFolder}"
         }
     ]
 }
