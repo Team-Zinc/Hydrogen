@@ -1,7 +1,7 @@
 use crate::project::parse::Parse;
-use crate::project::project_error::{ProjectError};
-use crate::project::project_error;
-use super::dependency::Dependency;
+use crate::project::parse::ParsingError;
+use crate::project::parse;
+use crate::actual::project_dependency::Dependency;
 
 use snafu::{ResultExt};
 use serde::{Serialize, Deserialize};
@@ -24,9 +24,9 @@ impl StaticActual {
 }
 
 impl Parse for StaticActual {
-    fn from_string(&mut self, src: &str) -> Result<(), ProjectError> {
+    fn from_string(&mut self, src: &str) -> Result<(), ParsingError> {
         *self = serde_yaml::from_str(src).context(
-            project_error::ParseFile {
+            parse::ParseError {
                 filetype: "fetchfile",
             }
         )?;

@@ -1,6 +1,6 @@
-use crate::project::{parse::Parse, kinds::Vendor};
-use crate::project::project_error::{ProjectError};
-use crate::project::project_error;
+use crate::project::kinds::Vendor;
+use crate::project::parse::{ParsingError, Parse};
+use crate::project::parse;
 
 use snafu::{ResultExt};
 use serde::{Serialize, Deserialize};
@@ -23,9 +23,9 @@ impl Fetchfile {
 }
 
 impl Parse for Fetchfile {
-    fn from_string(&mut self, src: &str) -> Result<(), ProjectError> {
+    fn from_string(&mut self, src: &str) -> Result<(), ParsingError> {
         *self = serde_yaml::from_str(src).context(
-            project_error::ParseFile {
+            parse::ParseError {
                 filetype: "fetchfile",
             }
         )?;

@@ -325,9 +325,11 @@ dependencies = [
  "indicatif",
  "inflections",
  "log",
+ "path-clean",
  "rand 0.7.3",
  "rayon",
  "serde",
+ "serde_json",
  "serde_yaml",
  "snafu",
  "structopt",
@@ -439,6 +441,12 @@ name = "number_prefix"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "17b02fc0ff9a9e4b35b3342880f48e896ebf69f2967921fe8646bf5b7125956a"
+
+[[package]]
+name = "path-clean"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ecba01bf2678719532c5e3059e0b5f0811273d94b397088b82e3bd0a78c78fdd"
 
 [[package]]
 name = "ppv-lite86"

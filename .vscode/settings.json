@@ -5,8 +5,11 @@
         "NOINPUT",
         "actuals",
         "bincode",
+        "canonicalize",
+        "deps",
         "exitcode",
         "fasthash",
+        "structopt",
         "thiserror"
     ],
     "git.ignoreLimitWarning": true

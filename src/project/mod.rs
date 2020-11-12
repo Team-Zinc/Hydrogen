@@ -1,17 +1,15 @@
 pub mod parse;
 pub mod kinds;
-pub mod project_error;
 
 use crate::meta::Meta;
 use crate::fetchfile::Fetchfile;
 use crate::actual::{static_actual::StaticActual, real_actual::RealActual};
-// use crate::project::project_error::ProjectError;
-// use crate::project::parse::Parse;
 
-use std::fs;
+use std::{fs, io};
 use std::path::Path;
 
 use serde::{Serialize, Deserialize}; 
+use snafu::{Snafu, ResultExt};
 
 // TODO: Make file names "prettier"
 /// Where to look for the meta file.
@@ -22,6 +20,16 @@ const FETCH_FILE: &str = "Fetch.yml";
 const STATIC_BUILD_FILE: &str = "Build.yml";
 /// Where to look for the dynamic actual file.
 // const DYNAMIC_BUILD_FILE: &str = "Build.py";
+
+#[derive(Debug, Snafu)]
+pub enum ProjectError__ {
+    #[snafu(visibility(pub(crate)))] 
+    #[snafu(display("Unable to read configuration from {}", path))]
+    ConfigReadError {
+        path: &'static str,
+        source: io::Error,
+    },
+}
 
 /// A templated generic struct for
 /// holding sources and the actual
@@ -61,41 +69,54 @@ impl Project {
 
     /// Looks for a project in the current directory, and
     /// read it if it exists.
-    pub fn read_all(&mut self) -> Result<(), std::io::Error> {
+    pub fn read_all(&mut self) -> Result<(), ProjectError__> {
         if Path::new(META_FILE).exists() {
+            /* let src = fs::read_to_string(META_FILE)
+                .context(IOConfigError {
+                    path: META_FILE,
+                })?; */
+
+            let src = fs::read_to_string(META_FILE)
+                .context(ConfigReadError {
+                    path: META_FILE,
+            })?;
+
             self.meta = Some(Box::from(ProjectElement{
                 element: Meta::new(),
-                src: fs::read_to_string(META_FILE)?,
+                src: src, 
             }));
         }
 
         if Path::new(FETCH_FILE).exists() {
+            let src = fs::read_to_string(FETCH_FILE)
+                .context(ConfigReadError {
+                    path: FETCH_FILE,
+            })?;
+
             self.fetchfile = Some(Box::from(ProjectElement{
                 element: Fetchfile::new(),
-                src: fs::read_to_string(FETCH_FILE)?,
+                src: src, 
             }));
         }
-
+ 
         if Path::new(STATIC_BUILD_FILE).exists() {
+            let src = fs::read_to_string(STATIC_BUILD_FILE)
+                .context(ConfigReadError {
+                    path: STATIC_BUILD_FILE,
+            })?;
+
             self.static_actual = Some(Box::from(ProjectElement{
                 element: StaticActual::new(),
-                src: fs::read_to_string(STATIC_BUILD_FILE)?,
+                src: src, 
             }));
         }
 
         Ok(())
     }
 
-    /// # NOT IMPLEMENTED
-    /// Constructs a RealActual from a DynamicActual.
-    /// Consumes the dynamic actual.
-    pub fn apply_dynamic_to_real(&mut self) {
-        panic!("NOT IMPLEMENTED: apply_dynamic: RealActual");
-    }
-
     /// Constructs a RealActual from a StaticActual.
     /// Consumes the static actual.
-    pub fn static_to_real(&mut self) {
+    pub fn construct_real_actual(&mut self) {
         let mut r = RealActual::new();
         r.from_static(self.static_actual.take().unwrap().element); 
         self.real_actual = Some(Box::from(r));

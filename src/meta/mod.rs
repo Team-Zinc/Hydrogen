@@ -1,6 +1,6 @@
 use crate::project::{parse::Parse, kinds::{Language, Type}};
-use crate::project::project_error::{ProjectError};
-use crate::project::project_error;
+use crate::project::parse::ParsingError;
+use crate::project::parse;
 
 use snafu::{ResultExt};
 use serde::{Serialize, Deserialize};
@@ -17,7 +17,9 @@ pub struct Meta {
     pub version: String,
 
     #[serde(rename = "type")]
+    #[serde(default)]
     pub type_of: Type,
+    #[serde(default)]
     pub language: Language,
 }
 
@@ -36,20 +38,12 @@ impl Meta {
 }
 
 impl Parse for Meta {
-    fn from_string(&mut self, src: &str) -> Result<(), ProjectError> {
+    fn from_string(&mut self, src: &str) -> Result<(), ParsingError> {
         *self = serde_yaml::from_str(src).context(
-            project_error::ParseFile {
+            parse::ParseError {
                 filetype: "meta",
             }
-        )?;
-
-        /* let p: Meta = match serde_yaml::from_str(src) {
-            Ok(m) => m,
-            Err(e) => {
-                println!("{:?}", e);
-                std::process::exit(1);
-            }
-        }; */ 
+        )?; 
         
         Ok(())
     }

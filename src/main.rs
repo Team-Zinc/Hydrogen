@@ -11,7 +11,6 @@ use log::*;
 use project::Project;
 use structopt::StructOpt;
 use rand::seq::SliceRandom;
-use actual::{real_actual::RealActual, static_actual::StaticActual};
 
 /// Entry point. 
 fn main() {
@@ -22,7 +21,7 @@ fn main() {
 
     match opts.get_command() {
         cli::Subcommand::Help{} => {
-            eprintln!("Please use the --help flag with not sub-command for help!");
+            tell_error!("Please use the --help flag with not sub-command for help!");
             trace!("Exiting with error code exitcode::NOINPUT ({})", exitcode::NOINPUT);
             std::process::exit(exitcode::NOINPUT);
         },
@@ -32,8 +31,11 @@ fn main() {
             // Look for root project.
             let mut root: Project = Project::new();
             match root.read_all() {
-                Err(e) => eprintln!("{}", e),
-                Ok(v) => v,
+                Ok(()) => (),
+                Err(e) => { 
+                    tell_failure!("{}", e);
+                    std::process::exit(1);
+                },
             };
 
             tell_info!("Recursing and parsing over everything just for you!");
@@ -48,19 +50,24 @@ fn main() {
 
             // Contruct the base actual from a static actual, if one exists.
             // Please note that this consumes static_actual with take().
+            // Also, we should parse it too.
             if root.static_actual.is_some() {
-                root.static_to_real();
+                root.construct_real_actual();
+                match root.parse_all_children() {
+                    Ok(()) => (),
+                    Err(e) => { 
+                        tell_failure!("{}", e);
+                        std::process::exit(1);
+                    },
+                };
             }
-
-            // Recurse and parse
-            
 
             tell_info!("Building all of it because I'm nice like that....");
             // Build
 
             tell_success!("Done! Everything should be built! Check above just in case of hisses.");
 
-            println!("{}", serde_yaml::to_string(&root).unwrap()); // FIXME: REMOVE
+            println!("{}", serde_json::to_string_pretty(&root).unwrap()); // FIXME: REMOVE
         },
 
         cli::Subcommand::Catz{} => {
