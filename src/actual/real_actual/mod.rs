@@ -1,8 +1,8 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use snafu::ResultExt;
 
-use crate::actual::static_actual::StaticActual;
 use crate::actual::project_dependency::Dependency;
+use crate::actual::static_actual::StaticActual;
 
 /// This "real actual" struct is what Hydrogen actually uses
 /// for building and dependency walking.
@@ -21,19 +21,23 @@ impl RealActual {
     }
 
     pub fn read_children(&mut self) -> Result<(), Box<dyn std::error::Error>> {
-        if self.dependencies.is_none() { return Ok(()); }
+        if self.dependencies.is_none() {
+            return Ok(());
+        }
         let mut deps = self.dependencies.take().unwrap();
-        
+
         for dep in &mut deps {
             dep.read_dependency()?;
         }
-        
+
         self.dependencies.replace(deps);
         Ok(())
     }
 
     pub fn parse_children(&mut self) -> Result<(), Box<dyn std::error::Error>> {
-        if self.dependencies.is_none() { return Ok(()) }
+        if self.dependencies.is_none() {
+            return Ok(());
+        }
         let mut deps = self.dependencies.take().unwrap();
 
         for dep in &mut deps {
@@ -61,9 +65,9 @@ impl RealActual {
         if sa.files.is_some() {
             (*self).files = sa.files;
         }
-        
+
         if sa.dependencies.is_some() {
-            (*self).dependencies = Some(sa.dependencies.unwrap()); 
+            (*self).dependencies = Some(sa.dependencies.unwrap());
         }
     }
 }

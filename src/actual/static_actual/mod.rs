@@ -1,10 +1,10 @@
+use crate::actual::project_dependency::Dependency;
+use crate::project::parse;
 use crate::project::parse::Parse;
 use crate::project::parse::ParsingError;
-use crate::project::parse;
-use crate::actual::project_dependency::Dependency;
 
-use snafu::{ResultExt};
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
+use snafu::ResultExt;
 // The fetchfile (located in fetch.yml) describes
 // where and how to download a dependency.
 
@@ -25,11 +25,9 @@ impl StaticActual {
 
 impl Parse for StaticActual {
     fn from_string(&mut self, src: &str) -> Result<(), ParsingError> {
-        *self = serde_yaml::from_str(src).context(
-            parse::ParseError {
-                filetype: "fetchfile",
-            }
-        )?;
+        *self = serde_yaml::from_str(src).context(parse::ParseError {
+            filetype: "fetchfile",
+        })?;
 
         Ok(())
     }
