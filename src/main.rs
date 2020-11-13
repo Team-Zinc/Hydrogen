@@ -4,11 +4,9 @@ mod actual;
 mod cats;
 mod cli;
 mod fetchfile;
-mod logging;
 mod meta;
 mod project; // I challenge you to explore.....
 
-use log::*;
 use project::Project;
 use rand::seq::SliceRandom;
 use structopt::StructOpt;
@@ -18,15 +16,10 @@ fn main() {
     // Init stuff
     // Parse Options
     let opts = cli::Opts::from_args();
-    logging::init();
 
     match opts.get_command() {
         cli::Subcommand::Help {} => {
             tell_error!("Please use the --help flag with not sub-command for help!");
-            trace!(
-                "Exiting with error code exitcode::NOINPUT ({})",
-                exitcode::NOINPUT
-            );
             std::process::exit(exitcode::NOINPUT);
         }
 

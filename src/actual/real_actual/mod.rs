@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use snafu::ResultExt;
 
 use crate::actual::project_dependency::Dependency;
 use crate::actual::static_actual::StaticActual;
@@ -18,34 +17,6 @@ impl RealActual {
             files: None,
             dependencies: None,
         }
-    }
-
-    pub fn read_children(&mut self) -> Result<(), Box<dyn std::error::Error>> {
-        if self.dependencies.is_none() {
-            return Ok(());
-        }
-        let mut deps = self.dependencies.take().unwrap();
-
-        for dep in &mut deps {
-            dep.read_dependency()?;
-        }
-
-        self.dependencies.replace(deps);
-        Ok(())
-    }
-
-    pub fn parse_children(&mut self) -> Result<(), Box<dyn std::error::Error>> {
-        if self.dependencies.is_none() {
-            return Ok(());
-        }
-        let mut deps = self.dependencies.take().unwrap();
-
-        for dep in &mut deps {
-            dep.parse_dependency()?;
-        }
-
-        self.dependencies.replace(deps);
-        Ok(())
     }
 
     /// # NOT IMPLEMENTED

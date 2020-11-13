@@ -1,5 +1,1 @@
 files: ['**.cpp', '**.hpp']
-
-dependencies:
-  - name: x
-    at: x
