@@ -1,8 +1,10 @@
 use crate::project::Project;
 
-use snafu::Snafu;
+use snafu::{Snafu, ResultExt};
+use path_clean::PathClean;
 
-use std::mem;
+use std::{mem, env, io};
+use std::path::PathBuf;
 
 #[derive(Debug, Snafu)]
 #[snafu(visibility(pub(crate)))]
@@ -12,6 +14,19 @@ pub enum ParsingError {
     ParseError {
         source: serde_yaml::Error,
         filetype: String
+    },
+
+    #[snafu(visibility(pub(crate)))]
+    #[snafu(display("Failed to get current working directory: {}", source))]
+    GetDirError { 
+        source: io::Error,
+    },
+
+    #[snafu(visibility(pub(crate)))]
+    #[snafu(display("Failed to change directory to {}: {}", to.display(), source))]
+    ChangeDirError {
+        to: PathBuf,
+        source: io::Error,
     },
 }
 
@@ -65,29 +80,32 @@ impl Project {
         if self.real_actual.is_none() { return Ok(()); }
         let mut real = self.real_actual.take().unwrap();
         
-        real.read_children()?;
-        real.parse_children()?;
-
+        if real.dependencies.is_none() { return Ok(()); }
         let mut children = real.dependencies.take().unwrap();
 
         for child in &mut children {
+            println!("{}", child.name);
+
+            let old_directory = env::current_dir()
+                .context(GetDirError {})?.into_os_string().into_string().unwrap();
+
+            env::set_current_dir(&child.at)
+                .context(ChangeDirError {
+                    to: PathBuf::from(&child.at).clean(),
+            })?;
+
             child.read_dependency()?;
             child.parse_dependency()?;
 
             let mut child_project = child.project.take().unwrap();
 
-            if child_project.real_actual.is_some() {
-                let mut tmp = child_project.real_actual.take().unwrap();
-                let mut tmp2 = tmp.dependencies.take().unwrap();
-                println!("{}: {}", child.name, tmp2.len());
-                tmp.dependencies.replace(tmp2);
-                child_project.real_actual.replace(tmp);
-            } else {
-                println!("{} doens't have any dependencies", child.name);
-            }
-
+            child_project.construct_real_actual();
             child_project.parse_all_children()?;
             child.project.replace(child_project); 
+
+            env::set_current_dir(&old_directory).context(ChangeDirError {
+                to: PathBuf::from(&old_directory).clean()
+            })?;
         }
     
         real.dependencies.replace(children);

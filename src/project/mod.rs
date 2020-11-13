@@ -22,7 +22,7 @@ const STATIC_BUILD_FILE: &str = "Build.yml";
 // const DYNAMIC_BUILD_FILE: &str = "Build.py";
 
 #[derive(Debug, Snafu)]
-pub enum ProjectError__ {
+pub enum ProjectError {
     #[snafu(visibility(pub(crate)))] 
     #[snafu(display("Unable to read configuration from {}", path))]
     ConfigReadError {
@@ -69,7 +69,7 @@ impl Project {
 
     /// Looks for a project in the current directory, and
     /// read it if it exists.
-    pub fn read_all(&mut self) -> Result<(), ProjectError__> {
+    pub fn read_all(&mut self) -> Result<(), ProjectError> {
         if Path::new(META_FILE).exists() {
             /* let src = fs::read_to_string(META_FILE)
                 .context(IOConfigError {
@@ -117,6 +117,7 @@ impl Project {
     /// Constructs a RealActual from a StaticActual.
     /// Consumes the static actual.
     pub fn construct_real_actual(&mut self) {
+        if self.static_actual.is_none() { return; }
         let mut r = RealActual::new();
         r.from_static(self.static_actual.take().unwrap().element); 
         self.real_actual = Some(Box::from(r));

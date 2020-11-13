@@ -33,5 +33,3 @@ impl Parse for Fetchfile {
         Ok(())
     }
 }
-
-/* fn from_string(&mut self, src: &str) -> Result<(), ProjectError>; */

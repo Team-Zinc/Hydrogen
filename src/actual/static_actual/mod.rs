@@ -34,5 +34,3 @@ impl Parse for StaticActual {
         Ok(())
     }
 }
-
-/* fn from_string(&mut self, src: &str) -> Result<(), ProjectError>; */
