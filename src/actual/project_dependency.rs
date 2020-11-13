@@ -1,13 +1,6 @@
-use path_clean::{clean, PathClean};
-use serde::{Deserialize, Serialize};
-use snafu::{ResultExt, Snafu};
+use serde::{Deserialize, Serialize}; 
 
-use std::path::{Path, PathBuf};
-use std::{env, fs, io};
-
-use crate::project;
 use crate::project::Project;
-use crate::project::ProjectError;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Dependency {

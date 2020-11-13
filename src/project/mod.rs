@@ -1,5 +1,6 @@
 pub mod kinds;
 pub mod parse;
+pub mod build;
 
 use crate::actual::{real_actual::RealActual, static_actual::StaticActual};
 use crate::fetchfile::Fetchfile;

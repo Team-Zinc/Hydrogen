@@ -2,16 +2,25 @@
     "cSpell.words": [
         "Contruct",
         "Isacc",
+        "MSVC",
         "NOINPUT",
+        "Scons",
         "actuals",
         "bincode",
+        "bytecode",
         "canonicalize",
         "deps",
         "exitcode",
         "fasthash",
+        "mingw",
+        "opon",
+        "shmanshy",
+        "simotainuly",
         "struct",
         "structopt",
-        "thiserror"
+        "thiserror",
+        "versionable",
+        "yarnpkg"
     ],
     "git.ignoreLimitWarning": true
 }
