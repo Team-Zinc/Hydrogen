@@ -1,8 +1,9 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 /// Contains the type of the project.
 #[derive(Debug, Serialize, Deserialize)]
-pub enum Type { // TODO: Rename to something like ProjectType 
+pub enum Type {
+    // TODO: Rename to something like ProjectType
     #[serde(alias = "Parent", alias = "Container", alias = "Meta", alias = "None")]
     Super,
     #[serde(alias = "Static", alias = "Library")]
@@ -32,13 +33,17 @@ pub enum Language {
 #[derive(Debug, Serialize, Deserialize)]
 pub enum Vendor {
     #[serde(alias = "Github")]
-    GitHub
+    GitHub,
 }
 
 impl Default for Type {
-    fn default() -> Self { Self::Super }
+    fn default() -> Self {
+        Self::Super
+    }
 }
 
 impl Default for Language {
-    fn default() -> Self { Self::None }
+    fn default() -> Self {
+        Self::None
+    }
 }

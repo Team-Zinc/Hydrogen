@@ -1,9 +1,9 @@
-use snafu::{ResultExt, Snafu};
-use serde::{Serialize, Deserialize};
 use path_clean::{clean, PathClean};
+use serde::{Deserialize, Serialize};
+use snafu::{ResultExt, Snafu};
 
-use std::{env, fs, io};
 use std::path::{Path, PathBuf};
+use std::{env, fs, io};
 
 use crate::project;
 use crate::project::Project;

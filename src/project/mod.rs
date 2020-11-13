@@ -1,15 +1,15 @@
-pub mod parse;
 pub mod kinds;
+pub mod parse;
 
-use crate::meta::Meta;
+use crate::actual::{real_actual::RealActual, static_actual::StaticActual};
 use crate::fetchfile::Fetchfile;
-use crate::actual::{static_actual::StaticActual, real_actual::RealActual};
+use crate::meta::Meta;
 
-use std::{fs, io};
 use std::path::Path;
+use std::{fs, io};
 
-use serde::{Serialize, Deserialize}; 
-use snafu::{Snafu, ResultExt};
+use serde::{Deserialize, Serialize};
+use snafu::{ResultExt, Snafu};
 
 // TODO: Make file names "prettier"
 /// Where to look for the meta file.
@@ -23,7 +23,7 @@ const STATIC_BUILD_FILE: &str = "Build.yml";
 
 #[derive(Debug, Snafu)]
 pub enum ProjectError {
-    #[snafu(visibility(pub(crate)))] 
+    #[snafu(visibility(pub(crate)))]
     #[snafu(display("Unable to read configuration from {}", path))]
     ConfigReadError {
         path: &'static str,
@@ -47,7 +47,7 @@ pub struct ProjectElement<T> {
 /// a dependency declaration file (Fetch.yml),
 /// a static actual file (Build.yml)
 /// and a dynamic actual file (Build.py).
-/// 
+///
 /// Please note the dynamic actual files are not yet implemented.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Project {
@@ -72,42 +72,36 @@ impl Project {
     pub fn read_all(&mut self) -> Result<(), ProjectError> {
         if Path::new(META_FILE).exists() {
             /* let src = fs::read_to_string(META_FILE)
-                .context(IOConfigError {
-                    path: META_FILE,
-                })?; */
+            .context(IOConfigError {
+                path: META_FILE,
+            })?; */
 
-            let src = fs::read_to_string(META_FILE)
-                .context(ConfigReadError {
-                    path: META_FILE,
-            })?;
+            let src = fs::read_to_string(META_FILE).context(ConfigReadError { path: META_FILE })?;
 
-            self.meta = Some(Box::from(ProjectElement{
+            self.meta = Some(Box::from(ProjectElement {
                 element: Meta::new(),
-                src: src, 
+                src: src,
             }));
         }
 
         if Path::new(FETCH_FILE).exists() {
-            let src = fs::read_to_string(FETCH_FILE)
-                .context(ConfigReadError {
-                    path: FETCH_FILE,
-            })?;
+            let src =
+                fs::read_to_string(FETCH_FILE).context(ConfigReadError { path: FETCH_FILE })?;
 
-            self.fetchfile = Some(Box::from(ProjectElement{
+            self.fetchfile = Some(Box::from(ProjectElement {
                 element: Fetchfile::new(),
-                src: src, 
+                src: src,
             }));
         }
- 
+
         if Path::new(STATIC_BUILD_FILE).exists() {
-            let src = fs::read_to_string(STATIC_BUILD_FILE)
-                .context(ConfigReadError {
-                    path: STATIC_BUILD_FILE,
+            let src = fs::read_to_string(STATIC_BUILD_FILE).context(ConfigReadError {
+                path: STATIC_BUILD_FILE,
             })?;
 
-            self.static_actual = Some(Box::from(ProjectElement{
+            self.static_actual = Some(Box::from(ProjectElement {
                 element: StaticActual::new(),
-                src: src, 
+                src: src,
             }));
         }
 
@@ -117,9 +111,11 @@ impl Project {
     /// Constructs a RealActual from a StaticActual.
     /// Consumes the static actual.
     pub fn construct_real_actual(&mut self) {
-        if self.static_actual.is_none() { return; }
+        if self.static_actual.is_none() {
+            return;
+        }
         let mut r = RealActual::new();
-        r.from_static(self.static_actual.take().unwrap().element); 
+        r.from_static(self.static_actual.take().unwrap().element);
         self.real_actual = Some(Box::from(r));
     }
 }

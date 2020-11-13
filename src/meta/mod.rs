@@ -1,9 +1,12 @@
-use crate::project::{parse::Parse, kinds::{Language, Type}};
-use crate::project::parse::ParsingError;
 use crate::project::parse;
+use crate::project::parse::ParsingError;
+use crate::project::{
+    kinds::{Language, Type},
+    parse::Parse,
+};
 
-use snafu::{ResultExt};
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
+use snafu::ResultExt;
 
 /// Metadata (located in hy.yml) describes
 /// certain data about the project (like names and authors).
@@ -39,12 +42,8 @@ impl Meta {
 
 impl Parse for Meta {
     fn from_string(&mut self, src: &str) -> Result<(), ParsingError> {
-        *self = serde_yaml::from_str(src).context(
-            parse::ParseError {
-                filetype: "meta",
-            }
-        )?; 
-        
+        *self = serde_yaml::from_str(src).context(parse::ParseError { filetype: "meta" })?;
+
         Ok(())
     }
 }
