@@ -4,6 +4,4 @@ dependencies:
   
   - name: hola
     at: src/hola
-
-  - name: documentation
-    at: docs
+    

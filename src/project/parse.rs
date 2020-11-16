@@ -42,15 +42,6 @@ impl Project {
             // self.meta = Some(e);
         }
 
-        if self.fetchfile.is_some() {
-            // Parse the fetch source
-            let mut e = self.fetchfile.take().unwrap();
-            e.element.from_string(e.src.as_ref())?;
-
-            mem::swap(&mut self.fetchfile, &mut Some(e));
-            // self.fetchfile = Some(e);
-        }
-
         if self.static_actual.is_some() {
             // Parse the static actual source
             let mut e = self.static_actual.take().unwrap();
@@ -66,46 +57,35 @@ impl Project {
     /// Parses all of its children. Not just the
     /// direct ones, but ALL of them.
     pub fn parse_all_children(&mut self) -> Result<(), Box<dyn std::error::Error>> {
-        if self.real_actual.is_none() {
-            return Ok(());
+        if let Some(ref mut real) = self.real_actual {
+            if let Some(ref mut children) = real.dependencies {
+                for child in &mut children.iter_mut() {
+                    let old_directory = env::current_dir()
+                        .context(GetDirError {})?
+                        .into_os_string()
+                        .into_string()
+                        .unwrap();
+
+                    env::set_current_dir(&child.at).context(ChangeDirError {
+                        to: PathBuf::from(&child.at).clean(),
+                    })?;
+
+                    let mut child_project = Project::new();
+                    child_project.read_all()?;
+                    child_project.parse_all()?;
+
+                    child_project.parse_all_children()?;
+                    child_project.construct_real_actual();
+
+                    child.project = Some(child_project);
+
+                    env::set_current_dir(&old_directory).context(ChangeDirError {
+                        to: PathBuf::from(&old_directory).clean(),
+                    })?;
+                }
+            }
         }
-        let mut real = self.real_actual.take().unwrap();
-
-        if real.dependencies.is_none() {
-            return Ok(());
-        }
-        let mut children = real.dependencies.take().unwrap();
-
-        for child in &mut children {
-            println!("{}", child.name);
-
-            let old_directory = env::current_dir()
-                .context(GetDirError {})?
-                .into_os_string()
-                .into_string()
-                .unwrap();
-
-            env::set_current_dir(&child.at).context(ChangeDirError {
-                to: PathBuf::from(&child.at).clean(),
-            })?;
-
-            child.read_dependency()?;
-            child.parse_dependency()?;
-
-            let mut child_project = child.project.take().unwrap();
-
-            child_project.construct_real_actual();
-            child_project.parse_all_children()?;
-            child.project.replace(child_project);
-
-            env::set_current_dir(&old_directory).context(ChangeDirError {
-                to: PathBuf::from(&old_directory).clean(),
-            })?;
-        }
-
-        real.dependencies.replace(children);
-        self.real_actual.replace(real);
-
+        
         Ok(())
     }
 }

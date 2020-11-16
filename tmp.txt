@@ -1,0 +1,4 @@
+for each project
+    Look at the language, and call the base configure stuff.
+    Then, look at the profile to establish some base flags.
+    Simply look at each file, and build it with those flags.

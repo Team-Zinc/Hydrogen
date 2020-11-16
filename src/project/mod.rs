@@ -3,7 +3,6 @@ pub mod parse;
 pub mod build;
 
 use crate::actual::{real_actual::RealActual, static_actual::StaticActual};
-use crate::fetchfile::Fetchfile;
 use crate::meta::Meta;
 
 use std::path::Path;
@@ -15,8 +14,6 @@ use snafu::{ResultExt, Snafu};
 // TODO: Make file names "prettier"
 /// Where to look for the meta file.
 const META_FILE: &str = "Hydrogen.yml";
-/// Where to look for the fetch file.
-const FETCH_FILE: &str = "Fetch.yml";
 /// Where to look for the static actual file.
 const STATIC_BUILD_FILE: &str = "Build.yml";
 /// Where to look for the dynamic actual file.
@@ -53,7 +50,6 @@ pub struct ProjectElement<T> {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Project {
     pub meta: Option<Box<ProjectElement<Meta>>>,
-    pub fetchfile: Option<Box<ProjectElement<Fetchfile>>>,
     pub static_actual: Option<Box<ProjectElement<StaticActual>>>,
     pub real_actual: Option<Box<RealActual>>,
 }
@@ -62,7 +58,6 @@ impl Project {
     pub fn new() -> Self {
         Self {
             meta: None,
-            fetchfile: None,
             static_actual: None,
             real_actual: None,
         }
@@ -81,16 +76,6 @@ impl Project {
 
             self.meta = Some(Box::from(ProjectElement {
                 element: Meta::new(),
-                src: src,
-            }));
-        }
-
-        if Path::new(FETCH_FILE).exists() {
-            let src =
-                fs::read_to_string(FETCH_FILE).context(ConfigReadError { path: FETCH_FILE })?;
-
-            self.fetchfile = Some(Box::from(ProjectElement {
-                element: Fetchfile::new(),
                 src: src,
             }));
         }
@@ -118,5 +103,31 @@ impl Project {
         let mut r = RealActual::new();
         r.from_static(self.static_actual.take().unwrap().element);
         self.real_actual = Some(Box::from(r));
+    }
+
+    /// Recurse to get every single child.
+    pub fn get_all_children(&self) -> Option<Vec<&Project>> {
+        let mut stack: Vec<&Project> = Vec::new();
+       
+        if let Some(ref real) = self.real_actual {
+            if let Some(ref deps) = real.dependencies {
+                for dep in deps {
+                    if let Some(ref project) = dep.project {
+                        stack.push(project);
+                        if let Some(ref mut children) = project.get_all_children() {
+                            stack.append(children);
+                        }
+                    }
+                }
+            }
+        }
+
+        stack.reverse();
+        Some(stack)
+    }
+
+    /// Just a wrapper around .get_all_children()
+    pub fn topo_sort(&self) -> Option<Vec<&Project>> {
+        self.get_all_children()
     }
 }
