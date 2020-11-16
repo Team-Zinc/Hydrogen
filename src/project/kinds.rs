@@ -1,5 +1,8 @@
 use serde::{Deserialize, Serialize};
 
+use crate::project::Project;
+use super::build::gcc;
+
 /// Contains the type of the project.
 #[derive(Debug, Serialize, Deserialize)]
 pub enum Type {
@@ -22,6 +25,8 @@ pub enum Language {
     C,
     #[serde(rename = "C++")]
     Cpp,
+    Rust,
+    Go,
     None,
 }
 
@@ -33,7 +38,7 @@ pub enum Language {
 #[derive(Debug, Serialize, Deserialize)]
 pub enum Vendor {
     #[serde(alias = "Github")]
-    GitHub,
+    Zip,
 }
 
 impl Default for Type {
@@ -45,5 +50,27 @@ impl Default for Type {
 impl Default for Language {
     fn default() -> Self {
         Self::None
+    }
+}
+
+impl Language {
+    pub fn get_configurator(&self) -> Box<dyn Fn(&Project) -> Result<(), Box<dyn std::error::Error>>> {
+        match *self {
+            Language::None => Box::new(|_p| Ok(())),
+            Language::Go => Box::new(|_p| Ok(())),
+            Language::Rust => Box::new(|_p| Ok(())),
+            Language::C => Box::new(gcc::configure_project),
+            Language::Cpp => Box::new(gcc::configure_project),
+        }
+    }
+
+    pub fn get_builder(&self) -> Box<dyn Fn(&Project) -> Result<(), Box<dyn std::error::Error>>> {
+        match *self {
+            Language::None => Box::new(|_p| Ok(())),
+            Language::Go => Box::new(|_p| Ok(())),
+            Language::Rust => Box::new(|_p| Ok(())),
+            Language::C => Box::new(gcc::build_project),
+            Language::Cpp => Box::new(gcc::build_project),
+        }
     }
 }
