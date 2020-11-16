@@ -61,9 +61,6 @@ A "real" actual is the actual internal struct that Hydrogen uses to build your p
 ### Hydrogen.yml
 A "metadata" file that contains information about your project, at a glance!
 
-### Fetch.yml
-Provides information on how to download that part of the project.
-
 ### Build.yml
 A static actual. By this, I mean an actual that cannot be changed, hence the name static.
 
@@ -73,14 +70,12 @@ A dynamic actual.
 ## Order
 Hydrogen parses and (possibly) runs the build files in a certain order. They are as follows:
 ```
-1. Fetch.yml
 2. Meta.yml
 3. Build.yml
 4. Build.py
 ```
-This order is used because first, you always want to fetch things that are required for building and configuration.
 
-Then, you want to figure out information about the project.
+First, you want to figure out information about the project.
 
 After that, you want to create a static actual, and then possibly change it with a dynamic actual.
 
