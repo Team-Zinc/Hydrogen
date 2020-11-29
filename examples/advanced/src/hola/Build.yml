@@ -1,1 +1,1 @@
-files: ['**.cpp', '**.hpp']
+files: ['*.c']

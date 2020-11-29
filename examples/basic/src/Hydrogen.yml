@@ -1,0 +1,6 @@
+name: add
+description: A simple utility to add 5 and 3.
+authors: [Milo Banks]
+version: 1.0.0
+
+type: Binary

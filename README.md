@@ -22,12 +22,11 @@ authors: [Milo Banks]
 version: 1.0.0
 
 type: Binary
-language: C++
 ```
 
 `./Build.yml`
 ```yaml
-files: ['**.cpp', '**.hpp']
+files: ['**/*.cpp']
 # OR
 files: ['main.cpp']
 ```
@@ -45,6 +44,9 @@ add_executable(hello main.cpp)
 ```
 
 Even though the CMake is shorter, you probably know that it's really easy to shoot yourself in the foot with it. Plus, it just look *hideous*.
+
+## Notes:
+Before policies are implemented (probably in the next PR), you will need to make sure that if you want a project to build, you must supply a type. This is just because Hydrogen optimises out building projects that don't have a type (and are thus assumed just to be parent projects).
 
 ## Vocab
 Here is some vocab that will help you on your Hydrogen based journey!

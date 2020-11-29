@@ -1,11 +1,11 @@
+use crate::project::Project;
+use crate::project::build::link::*;
+
 use serde::{Deserialize, Serialize};
 
-use crate::project::Project;
-use super::build::gcc;
-
 /// Contains the type of the project.
-#[derive(Debug, Serialize, Deserialize)]
-pub enum Type {
+#[derive(Debug, Serialize, Deserialize, Eq, PartialEq)]
+pub enum ProjectType {
     // TODO: Rename to something like ProjectType
     #[serde(alias = "Parent", alias = "Container", alias = "Meta", alias = "None")]
     Super,
@@ -15,19 +15,6 @@ pub enum Type {
     DynamicLibrary,
     #[serde(alias = "Binary", alias = "dog")]
     Executable,
-}
-
-/// Contains the MAIN language of the project.
-/// E.g. if your project contained mostly C++
-/// with a little C, you would chose C++.
-#[derive(Debug, Serialize, Deserialize)]
-pub enum Language {
-    C,
-    #[serde(rename = "C++")]
-    Cpp,
-    Rust,
-    Go,
-    None,
 }
 
 /// Where to download software from.
@@ -41,36 +28,37 @@ pub enum Vendor {
     Zip,
 }
 
-impl Default for Type {
+impl Default for ProjectType {
     fn default() -> Self {
         Self::Super
     }
 }
 
-impl Default for Language {
-    fn default() -> Self {
-        Self::None
-    }
-}
-
-impl Language {
-    pub fn get_configurator(&self) -> Box<dyn Fn(&Project) -> Result<(), Box<dyn std::error::Error>>> {
-        match *self {
-            Language::None => Box::new(|_p| Ok(())),
-            Language::Go => Box::new(|_p| Ok(())),
-            Language::Rust => Box::new(|_p| Ok(())),
-            Language::C => Box::new(gcc::configure_project),
-            Language::Cpp => Box::new(gcc::configure_project),
+impl ProjectType {
+    pub fn get_type_link_flags(&self) -> Option<Box<dyn Fn(&Project) -> Vec<String>>>{
+        match self {
+            ProjectType::Executable => Some(Box::from(exe::get_link_flags)),
+            ProjectType::StaticLibrary => Some(Box::from(stlib::get_link_flags)),
+            ProjectType::DynamicLibrary => Some(Box::from(dylib::get_link_flags)),
+            ProjectType::Super => None,
         }
     }
 
-    pub fn get_builder(&self) -> Box<dyn Fn(&Project) -> Result<(), Box<dyn std::error::Error>>> {
-        match *self {
-            Language::None => Box::new(|_p| Ok(())),
-            Language::Go => Box::new(|_p| Ok(())),
-            Language::Rust => Box::new(|_p| Ok(())),
-            Language::C => Box::new(gcc::build_project),
-            Language::Cpp => Box::new(gcc::build_project),
+    pub fn get_type_output_file(&self) -> Option<Box<dyn Fn(&Project) -> String>>{
+        match self {
+            ProjectType::Executable => Some(Box::from(exe::get_output_file)),
+            ProjectType::StaticLibrary => Some(Box::from(stlib::get_output_file)),
+            ProjectType::DynamicLibrary => Some(Box::from(dylib::get_output_file)),
+            ProjectType::Super => None,
+        }
+    }
+
+    pub fn get_type_output_flags(&self) -> Option<Box<dyn Fn(&str) -> Vec<&str>>>{
+        match self {
+            ProjectType::Executable => Some(Box::from(exe::get_output_flags)),
+            ProjectType::StaticLibrary => Some(Box::from(stlib::get_output_flags)),
+            ProjectType::DynamicLibrary => Some(Box::from(dylib::get_output_flags)),
+            ProjectType::Super => None,
         }
     }
 }
