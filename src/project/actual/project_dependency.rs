@@ -17,6 +17,7 @@ pub struct ExternalDependency {
     pub version: String,
 }
 
+#[allow(dead_code)]
 impl Dependency {
     pub fn new() -> Self {
         Self {

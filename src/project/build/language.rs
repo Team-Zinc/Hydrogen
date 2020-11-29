@@ -1,5 +1,6 @@
-use super::configure::{BuildContext, ConfigurePool};
+use super::configure::ConfigurePool;
 use super::langs::c::gcc;
+use super::langs::cpp::gpp;
 use std::path::PathBuf;
 
 #[derive(Debug, Hash, Eq, PartialEq)]
@@ -31,7 +32,7 @@ impl Language {
     ) -> Box<dyn Fn(&PathBuf, &ConfigurePool) -> Result<(), Box<dyn std::error::Error>>> {
         match self {
             Self::C => Box::new(gcc::build_file),
-            Self::Cpp => Box::new(|_p, _c| Ok(())),
+            Self::Cpp => Box::new(gpp::build_file),
         }
     }
 
@@ -40,7 +41,7 @@ impl Language {
     ) -> Box<dyn Fn(&PathBuf, &mut ConfigurePool) -> Result<(), Box<dyn std::error::Error>>> {
         match self {
             Self::C => Box::new(gcc::configure_file),
-            Self::Cpp => Box::new(|_p, _c| Ok(())),
+            Self::Cpp => Box::new(gpp::configure_file),
         }
     }
 

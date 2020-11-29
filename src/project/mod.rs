@@ -10,7 +10,7 @@ use actual::{real_actual::RealActual, static_actual::StaticActual};
 use std::collections::HashSet;
 use std::path::Path;
 use std::path::PathBuf;
-use std::{fmt, fs, io, slice, mem};
+use std::{fmt, fs, io};
 
 use serde::{Deserialize, Serialize};
 use snafu::{ResultExt, Snafu};

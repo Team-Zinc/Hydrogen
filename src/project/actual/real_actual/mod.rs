@@ -25,6 +25,7 @@ impl RealActual {
     /// # NOT IMPLEMENTED
     /// Constructs a RealActual from a DynamicActual.
     /// Consumes the dynamic actual.
+    #[allow(dead_code)]
     pub fn apply_dynamic(&mut self) {
         panic!("NOT IMPLEMENTED: apply_dynamic: RealActual");
     }

@@ -1,6 +1,6 @@
 mod flags;
 
-use crate::project::build::configure::{ConfigureError, ConfigurePool, BuildContext};
+use crate::project::build::configure::{ConfigureError, ConfigurePool};
 use crate::project::build::language::Language;
 use crate::project::build::BuildError;
 
@@ -60,7 +60,7 @@ pub fn build_file(f: &PathBuf, p: &ConfigurePool) -> Result<(), Box<dyn std::err
 /// Configures and modifies the ConfigurePool
 /// based on a file.
 pub fn configure_file(
-    f: &PathBuf,
+    _f: &PathBuf,
     p: &mut ConfigurePool,
 ) -> Result<(), Box<dyn std::error::Error>> {
     // Do we need to find a compiler?

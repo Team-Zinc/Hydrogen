@@ -1,6 +1,11 @@
 [package]
 name = "hy"
-version = "0.1.0"
+version = "1.0.0"
+license = "GPL-3.0"
+repository = "https://github.com/Team-Zinc/Hydrogen"
+keywords = ["build", "system", "c", "c++", "gcc", "awesome-stuff"]
+categories = ["command-line-utilities", "development-tools"]
+readme = "README.md"
 authors = ["Milo Banks <plutoisaplanet4324@gmail.com>"]
 edition = "2018"
 
