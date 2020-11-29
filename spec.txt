@@ -2,9 +2,6 @@ This file contains information about what each file does, mainly for my own sake
 
 Hydrogen.yml
 	1. Provides metadata about the project such as name, authors, etc....
-	
-Fetch.yml
-	1. Provides info on how to download an external project
 
 Build.yml
 	1. Can provide a static build actual

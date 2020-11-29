@@ -4,25 +4,18 @@ use path_clean::PathClean;
 use snafu::{ResultExt, Snafu};
 
 use std::path::PathBuf;
-use std::{env, io, mem};
+use std::{env, mem};
 
 #[derive(Debug, Snafu)]
 #[snafu(visibility(pub(crate)))]
 pub enum ParsingError {
     #[snafu(visibility(pub(crate)))]
-    #[snafu(display("Unable to parse configuration from {}: {}", filetype, source))]
+    #[snafu(display("Unable to parse configuration from {} at {}: {}", filetype, at.display(), source))]
     ParseError {
         source: serde_yaml::Error,
         filetype: String,
+        at: PathBuf,
     },
-
-    #[snafu(visibility(pub(crate)))]
-    #[snafu(display("Failed to get current working directory: {}", source))]
-    GetDirError { source: io::Error },
-
-    #[snafu(visibility(pub(crate)))]
-    #[snafu(display("Failed to change directory to {}: {}", to.display(), source))]
-    ChangeDirError { to: PathBuf, source: io::Error },
 }
 
 pub trait Parse {
@@ -61,12 +54,12 @@ impl Project {
             if let Some(ref mut children) = real.dependencies {
                 for child in &mut children.iter_mut() {
                     let old_directory = env::current_dir()
-                        .context(GetDirError {})?
+                        .context(super::GetDirError {})?
                         .into_os_string()
                         .into_string()
                         .unwrap();
 
-                    env::set_current_dir(&child.at).context(ChangeDirError {
+                    env::set_current_dir(&child.at).context(super::ChangeDirError {
                         to: PathBuf::from(&child.at).clean(),
                     })?;
 
@@ -74,18 +67,19 @@ impl Project {
                     child_project.read_all()?;
                     child_project.parse_all()?;
 
+                    child_project.construct_real_actual()?;
+                    child_project.deep = self.deep - 1;
                     child_project.parse_all_children()?;
-                    child_project.construct_real_actual();
 
                     child.project = Some(child_project);
 
-                    env::set_current_dir(&old_directory).context(ChangeDirError {
+                    env::set_current_dir(&old_directory).context(super::ChangeDirError {
                         to: PathBuf::from(&old_directory).clean(),
                     })?;
                 }
             }
         }
-        
+
         Ok(())
     }
 }

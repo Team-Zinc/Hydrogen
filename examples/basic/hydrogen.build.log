@@ -1,0 +1,73 @@
+
+[2020-11-28 23:10:21/src/logging/mod.rs] -- INFO 
+
+
+
+	 ---- NEW RUN OF HYDROGEN: 2020-11-28 23:10:21 ----
+
+[2020-11-28 23:10:21/src/main.rs] -- TRACE 
+Build subcommand triggered.
+
+[2020-11-28 23:10:21/src/project/build/build.rs] -- TRACE 
+[
+  [
+    {
+      "meta": {
+        "element": {
+          "name": "add",
+          "description": "A simple utility to add 5 and 3.",
+          "authors": [
+            "Milo Banks"
+          ],
+          "version": "1.0.0",
+          "type": "Executable"
+        },
+        "src": "name: add\ndescription: A simple utility to add 5 and 3.\nauthors: [Milo Banks]\nversion: 1.0.0\n\ntype: Binary\n"
+      },
+      "static_actual": null,
+      "real_actual": {
+        "files": [
+          "/Users/milo/Developer/hydrogen/examples/basic/src/main.c",
+          "/Users/milo/Developer/hydrogen/examples/basic/src/util/add.c"
+        ],
+        "dependencies": null
+      },
+      "deep": -1
+    }
+  ]
+]
+
+[2020-11-28 23:10:21/src/project/build/build.rs] -- INFO 
+Building project add:1.0.0.
+
+[2020-11-28 23:10:21/src/project/build/build.rs] -- INFO 
+Compiling /Users/milo/Developer/hydrogen/examples/basic/src/main.c into object.
+
+[2020-11-28 23:10:21/src/project/build/build.rs] -- DEBUG 
+Using the C configuration and compilation backend gcc.
+
+[2020-11-28 23:10:21/src/project/build/langs/c/gcc/mod.rs] -- DEBUG 
+Running command:
+`/usr/bin/gcc ["/Users/milo/Developer/hydrogen/examples/basic/src/main.c", "-c", "-o", "/Users/milo/Developer/hydrogen/examples/basic/src/main.o"]`
+
+[2020-11-28 23:10:22/src/project/build/build.rs] -- INFO 
+Compiling /Users/milo/Developer/hydrogen/examples/basic/src/util/add.c into object.
+
+[2020-11-28 23:10:22/src/project/build/build.rs] -- DEBUG 
+Using the C configuration and compilation backend gcc.
+
+[2020-11-28 23:10:22/src/project/build/langs/c/gcc/mod.rs] -- DEBUG 
+Running command:
+`/usr/bin/gcc ["/Users/milo/Developer/hydrogen/examples/basic/src/util/add.c", "-c", "-o", "/Users/milo/Developer/hydrogen/examples/basic/src/util/add.o"]`
+
+[2020-11-28 23:10:22/src/project/build/build.rs] -- INFO 
+Linking add into final.
+
+[2020-11-28 23:10:22/src/project/build/link/mod.rs] -- DEBUG 
+Running command:
+`/usr/bin/ld ["-execute", "-lm", "-arch", "x86_64", "-macosx_version_min", "10.13", "-o", "target/add", "/Users/milo/Developer/hydrogen/examples/basic/src/main.o", "/Users/milo/Developer/hydrogen/examples/basic/src/util/add.o"]`
+
+[2020-11-28 23:10:22/src/project/build/build.rs] -- INFO 
+Project built successfully: add:1.0.0 was built in 1042 milliseconds
+
+

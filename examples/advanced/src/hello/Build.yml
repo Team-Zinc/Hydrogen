@@ -1,5 +1,5 @@
-files: ['**.cpp', '**.hpp']
+files: ['*.c']
 
 dependencies:
-  - name: x
-    at: x
+  - at: ../libtest
+    name: libtest

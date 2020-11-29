@@ -1,0 +1,6 @@
+name: test
+description: A simple library test.
+authors: [Milo Banks]
+version: 1.0.0
+
+type: StaticLibrary

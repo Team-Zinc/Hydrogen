@@ -1,9 +1,6 @@
 use crate::project::parse;
 use crate::project::parse::ParsingError;
-use crate::project::{
-    kinds::{Language, Type},
-    parse::Parse,
-};
+use crate::project::{kinds::ProjectType, parse::Parse};
 
 use serde::{Deserialize, Serialize};
 use snafu::ResultExt;
@@ -21,9 +18,9 @@ pub struct Meta {
 
     #[serde(rename = "type")]
     #[serde(default)]
-    pub type_of: Type,
-    #[serde(default)]
-    pub language: Language,
+    pub type_of: ProjectType,
+    // #[serde(default)]
+    // pub language: Language,
 }
 
 impl Meta {
@@ -34,15 +31,18 @@ impl Meta {
             authors: vec![],
             version: "".into(),
 
-            type_of: Type::default(),
-            language: Language::default(),
+            type_of: ProjectType::default(),
+            // language: Language::default(),
         }
     }
 }
 
 impl Parse for Meta {
     fn from_string(&mut self, src: &str) -> Result<(), ParsingError> {
-        *self = serde_yaml::from_str(src).context(parse::ParseError { filetype: "meta" })?;
+        *self = serde_yaml::from_str(src).context(parse::ParseError {
+            filetype: "Hydrogen.yml",
+            at: std::env::current_dir().unwrap(),
+        })?;
 
         Ok(())
     }

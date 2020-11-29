@@ -1,3 +1,5 @@
+use crate::project;
+use crate::project::build::{BuildPool};
 use crate::project::Project;
 
 pub fn build_subcommand() {
@@ -26,7 +28,14 @@ pub fn build_subcommand() {
     // Please note that this consumes static_actual with take().
     // Also, we should parse it too.
     if root.static_actual.is_some() {
-        root.construct_real_actual();
+        match root.construct_real_actual() {
+            Ok(()) => (),
+            Err(e) => {
+                tell_failure!("{}", e);
+                std::process::exit(1);
+            }
+        };
+
         match root.parse_all_children() {
             Ok(()) => (),
             Err(e) => {
@@ -39,15 +48,24 @@ pub fn build_subcommand() {
     // Now we run a simple topographical sort to
     // get everything into the correct order for
     // building and simple iteration.
-    let sorted_projects = root.topo_sort().unwrap_or_default();
+    let sorted_projects = project::into_layer_sort(root.topo_sort().unwrap()).unwrap();
 
-    tell_info!("Building all of it because I'm nice like that....");
+    tell_info!("Building (and configuring) everything because I'm nice like that....");
+
     // First, we iterate over all the projects
-    sorted_projects.into_iter().for_each(|p| {
-        println!("\n\n\n{:?}", p);
-    });
+    let mut hub = BuildPool::new(sorted_projects);
+    match hub.go() {
+        Ok(()) => (),
+        Err(e) => {
+            tell_failure!(
+                "The build/configure process failed. Check above for hisses! {}",
+                e
+            );
+            std::process::exit(1);
+        }
+    };
 
-    tell_success!("Done! Everything should be built! Check above just in case of hisses.");
+    tell_success!("Purrrr.... Everything should be built! Check above just in case of hisses!");
 
-    println!("{}", serde_json::to_string_pretty(&root).unwrap()); // FIXME: REMOVE
+    // println!("{}", serde_json::to_string_pretty(&root).unwrap()); // FIXME: REMOVE
 }

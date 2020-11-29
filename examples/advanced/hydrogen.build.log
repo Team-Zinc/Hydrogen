@@ -1,0 +1,185 @@
+
+[2020-11-28 23:02:42/src/logging/mod.rs] -- INFO 
+
+
+
+	 ---- NEW RUN OF HYDROGEN: 2020-11-28 23:02:42 ----
+
+[2020-11-28 23:02:42/src/main.rs] -- TRACE 
+Build subcommand triggered.
+
+[2020-11-28 23:02:42/src/project/build/build.rs] -- TRACE 
+[
+  [
+    {
+      "meta": {
+        "element": {
+          "name": "test",
+          "description": "A simple library test.",
+          "authors": [
+            "Milo Banks"
+          ],
+          "version": "1.0.0",
+          "type": "StaticLibrary"
+        },
+        "src": "name: test\ndescription: A simple library test.\nauthors: [Milo Banks]\nversion: 1.0.0\n\ntype: StaticLibrary\n"
+      },
+      "static_actual": null,
+      "real_actual": {
+        "files": [
+          "/Users/milo/Developer/hydrogen/examples/advanced/src/libtest/test.c"
+        ],
+        "dependencies": null
+      },
+      "deep": -2
+    }
+  ],
+  [
+    {
+      "meta": {
+        "element": {
+          "name": "hola",
+          "description": "A program that says \"Hola!\" in Spanish.",
+          "authors": [
+            "Milo Banks"
+          ],
+          "version": "1.0.0",
+          "type": "Executable"
+        },
+        "src": "name: hola\ndescription: A program that says \"Hola!\" in Spanish.\nauthors: [Milo Banks]\nversion: 1.0.0\n\ntype: Binary\n"
+      },
+      "static_actual": null,
+      "real_actual": {
+        "files": [
+          "/Users/milo/Developer/hydrogen/examples/advanced/src/hola/hola.c"
+        ],
+        "dependencies": null
+      },
+      "deep": -1
+    },
+    {
+      "meta": {
+        "element": {
+          "name": "hello",
+          "description": "A program that says \"Hello!\" in English.",
+          "authors": [
+            "Milo Banks"
+          ],
+          "version": "1.0.0",
+          "type": "Executable"
+        },
+        "src": "name: hello\ndescription: A program that says \"Hello!\" in English.\nauthors: [Milo Banks]\nversion: 1.0.0\n\ntype: Binary\n"
+      },
+      "static_actual": null,
+      "real_actual": {
+        "files": [
+          "/Users/milo/Developer/hydrogen/examples/advanced/src/hello/hello.c"
+        ],
+        "dependencies": [
+          {
+            "name": "libtest",
+            "at": "../libtest",
+            "project": {
+              "meta": {
+                "element": {
+                  "name": "test",
+                  "description": "A simple library test.",
+                  "authors": [
+                    "Milo Banks"
+                  ],
+                  "version": "1.0.0",
+                  "type": "StaticLibrary"
+                },
+                "src": "name: test\ndescription: A simple library test.\nauthors: [Milo Banks]\nversion: 1.0.0\n\ntype: StaticLibrary\n"
+              },
+              "static_actual": null,
+              "real_actual": {
+                "files": [
+                  "/Users/milo/Developer/hydrogen/examples/advanced/src/libtest/test.c"
+                ],
+                "dependencies": null
+              },
+              "deep": -2
+            }
+          }
+        ]
+      },
+      "deep": -1
+    }
+  ]
+]
+
+[2020-11-28 23:02:42/src/project/build/build.rs] -- INFO 
+Building project test:1.0.0.
+
+[2020-11-28 23:02:42/src/project/build/build.rs] -- INFO 
+Compiling /Users/milo/Developer/hydrogen/examples/advanced/src/libtest/test.c into object.
+
+[2020-11-28 23:02:42/src/project/build/build.rs] -- DEBUG 
+Using the C configuration and compilation backend gcc.
+
+[2020-11-28 23:02:42/src/project/build/langs/c/gcc/mod.rs] -- DEBUG 
+Running command:
+`/usr/bin/gcc ["/Users/milo/Developer/hydrogen/examples/advanced/src/libtest/test.c", "-c", "-o", "/Users/milo/Developer/hydrogen/examples/advanced/src/libtest/test.o"]`
+
+[2020-11-28 23:02:42/src/project/build/build.rs] -- INFO 
+Linking test into final.
+
+[2020-11-28 23:02:42/src/project/build/link/mod.rs] -- DEBUG 
+Running command:
+`/usr/bin/ar ["-rs", "target/libtest.a", "/Users/milo/Developer/hydrogen/examples/advanced/src/libtest/test.o"]`
+
+[2020-11-28 23:02:42/src/project/build/build.rs] -- INFO 
+Project built successfully: test:1.0.0 was built in 219 milliseconds
+
+
+
+[2020-11-28 23:02:42/src/project/build/build.rs] -- INFO 
+Building project hola:1.0.0.
+
+[2020-11-28 23:02:42/src/project/build/build.rs] -- INFO 
+Compiling /Users/milo/Developer/hydrogen/examples/advanced/src/hola/hola.c into object.
+
+[2020-11-28 23:02:42/src/project/build/build.rs] -- DEBUG 
+Using the C configuration and compilation backend gcc.
+
+[2020-11-28 23:02:42/src/project/build/langs/c/gcc/mod.rs] -- DEBUG 
+Running command:
+`/usr/bin/gcc ["/Users/milo/Developer/hydrogen/examples/advanced/src/hola/hola.c", "-c", "-o", "/Users/milo/Developer/hydrogen/examples/advanced/src/hola/hola.o"]`
+
+[2020-11-28 23:02:42/src/project/build/build.rs] -- INFO 
+Linking hola into final.
+
+[2020-11-28 23:02:42/src/project/build/link/mod.rs] -- DEBUG 
+Running command:
+`/usr/bin/ld ["-execute", "-lm", "-arch", "x86_64", "-macosx_version_min", "10.13", "-o", "target/hola", "/Users/milo/Developer/hydrogen/examples/advanced/src/hola/hola.o"]`
+
+[2020-11-28 23:02:42/src/project/build/build.rs] -- INFO 
+Project built successfully: hola:1.0.0 was built in 141 milliseconds
+
+
+
+[2020-11-28 23:02:42/src/project/build/build.rs] -- INFO 
+Building project hello:1.0.0.
+
+[2020-11-28 23:02:42/src/project/build/build.rs] -- INFO 
+Compiling /Users/milo/Developer/hydrogen/examples/advanced/src/hello/hello.c into object.
+
+[2020-11-28 23:02:42/src/project/build/build.rs] -- DEBUG 
+Using the C configuration and compilation backend gcc.
+
+[2020-11-28 23:02:42/src/project/build/langs/c/gcc/mod.rs] -- DEBUG 
+Running command:
+`/usr/bin/gcc ["/Users/milo/Developer/hydrogen/examples/advanced/src/hello/hello.c", "-c", "-o", "/Users/milo/Developer/hydrogen/examples/advanced/src/hello/hello.o"]`
+
+[2020-11-28 23:02:42/src/project/build/build.rs] -- INFO 
+Linking hello into final.
+
+[2020-11-28 23:02:42/src/project/build/link/mod.rs] -- DEBUG 
+Running command:
+`/usr/bin/ld ["-execute", "-lm", "-arch", "x86_64", "-L./target/", "-ltest", "-macosx_version_min", "10.13", "-o", "target/hello", "/Users/milo/Developer/hydrogen/examples/advanced/src/hello/hello.o"]`
+
+[2020-11-28 23:02:42/src/project/build/build.rs] -- INFO 
+Project built successfully: hello:1.0.0 was built in 135 milliseconds
+
+

@@ -1,4 +1,4 @@
-use crate::actual::project_dependency::Dependency;
+use super::project_dependency::Dependency;
 use crate::project::parse;
 use crate::project::parse::Parse;
 use crate::project::parse::ParsingError;
@@ -26,7 +26,8 @@ impl StaticActual {
 impl Parse for StaticActual {
     fn from_string(&mut self, src: &str) -> Result<(), ParsingError> {
         *self = serde_yaml::from_str(src).context(parse::ParseError {
-            filetype: "fetchfile",
+            filetype: "Build.yml",
+            at: std::env::current_dir().unwrap(),
         })?;
 
         Ok(())
