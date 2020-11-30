@@ -2,8 +2,9 @@
 name = "hy"
 version = "1.0.0"
 license = "GPL-3.0"
+description = "Hydrogen (hy) is a build system.... for the modern world!"
 repository = "https://github.com/Team-Zinc/Hydrogen"
-keywords = ["build", "system", "c", "c++", "gcc", "awesome-stuff"]
+keywords = ["build", "system", "c", "cpp", "gcc", "awesome-stuff"]
 categories = ["command-line-utilities", "development-tools"]
 readme = "README.md"
 authors = ["Milo Banks <plutoisaplanet4324@gmail.com>"]
