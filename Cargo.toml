@@ -33,5 +33,5 @@ edition = "2018"
     path-clean = "0.1.0"
     which = "4.0.2"
     
-    command-run = { version = "*", default-features = false }
+    command-run = { version = "0.13.0", default-features = false }
     fern = { version = "0.5.9", features = ["colored"] } # TODO: Once Fern 6.0.0 suports DateBased file logging, upgrade
