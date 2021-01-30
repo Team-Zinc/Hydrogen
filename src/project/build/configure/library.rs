@@ -22,6 +22,7 @@ impl FoundLibrary {
     }
 }
 
+#[allow(dead_code)]
 impl ConfigurePool {
     /// A wrapper around the pkg-config command.
     /// Finds a library, and gets it's flags for
@@ -36,7 +37,7 @@ impl ConfigurePool {
             }
         };
 
-        if let Some(ref external) = lib.external {
+        if let Some(ref _external) = lib.external {
             let mut pkg_config_proc = process::Command::new(pkg_config);
             let mut found = FoundLibrary::new();
 

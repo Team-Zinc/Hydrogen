@@ -1,6 +1,4 @@
-use std::path::PathBuf;
-
-use super::{ConfigureError, ConfigurePool};
+use super::ConfigurePool;
 use crate::project::build::language::Language;
 
 impl ConfigurePool {

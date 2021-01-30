@@ -1,6 +1,12 @@
 [package]
 name = "hy"
-version = "0.1.0"
+version = "1.0.0"
+license = "GPL-3.0"
+description = "Hydrogen (hy) is a build system.... for the modern world!"
+repository = "https://github.com/Team-Zinc/Hydrogen"
+keywords = ["build", "system", "c", "cpp", "gcc"]
+categories = ["command-line-utilities", "development-tools"]
+readme = "README.md"
 authors = ["Milo Banks <plutoisaplanet4324@gmail.com>"]
 edition = "2018"
 
@@ -27,5 +33,5 @@ edition = "2018"
     path-clean = "0.1.0"
     which = "4.0.2"
     
-    command-run = { version = "*", default-features = false }
+    command-run = { version = "0.13.0", default-features = false }
     fern = { version = "0.5.9", features = ["colored"] } # TODO: Once Fern 6.0.0 suports DateBased file logging, upgrade

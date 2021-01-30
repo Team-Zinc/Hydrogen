@@ -7,7 +7,6 @@ use std::path::PathBuf;
 use log::debug;
 
 use super::super::kinds::ProjectType;
-use super::configure::ConfigureError;
 use super::{ConfigurePool, Project};
 
 use command_run::Command;
@@ -49,7 +48,7 @@ pub fn link_objs(
         debug!("Running command:\n`{} {:?}`", command.program.display(), command.args);
 
         command.log_command = false;
-        let out = command.run()?;
+        let _out = command.run()?;
     }
 
     Ok(Some(PathBuf::from(output_file)))
