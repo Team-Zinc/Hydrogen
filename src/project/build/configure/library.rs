@@ -36,7 +36,7 @@ impl ConfigurePool {
             }
         };
 
-        if let Some(ref external) = lib.external {
+        if let Some(_external) = lib.external {
             let mut pkg_config_proc = process::Command::new(pkg_config);
             let mut found = FoundLibrary::new();
 

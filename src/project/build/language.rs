@@ -1,4 +1,4 @@
-use super::configure::{BuildContext, ConfigurePool};
+use super::configure::{ConfigurePool};
 use super::langs::c::gcc;
 use std::path::PathBuf;
 

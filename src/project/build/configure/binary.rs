@@ -1,8 +1,8 @@
-use std::path::PathBuf;
+
 
 use super::{ConfigureError, ConfigurePool};
 
-use snafu::ResultExt;
+
 
 impl ConfigurePool {
     pub fn find_binary(&mut self, bin: String) -> Result<(), Box<dyn std::error::Error>> {

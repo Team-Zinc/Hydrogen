@@ -5,8 +5,8 @@ pub mod library;
 use snafu::Snafu;
 
 use super::configure::library::FoundLibrary;
-use super::project::Project;
 use super::language::Language;
+
 use crate::project::kinds::ProjectType;
 
 use std::collections::HashMap;

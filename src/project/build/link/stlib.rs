@@ -4,7 +4,7 @@ pub fn get_output_flags(o: &str) -> Vec<&str> {
     vec![o]
 }
 
-pub fn get_link_flags(p: &Project) -> Vec<String> {
+pub fn get_link_flags(_p: &Project) -> Vec<String> {
     vec!["-rs".into()]
 }
 

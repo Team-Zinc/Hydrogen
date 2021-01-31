@@ -32,13 +32,23 @@ impl Dependency {
     pub fn get_output_filename(&self) -> String {
         if let Some(ref project) = self.project {
             if let Some(ref meta) = project.meta {
-                return [self.name.as_str(),
+                return [
+                    self.name.as_str(),
                     match meta.element.type_of {
-                        crate::project::kinds::ProjectType::Executable => std::env::consts::EXE_EXTENSION.to_string(),
-                        crate::project::kinds::ProjectType::StaticLibrary => crate::util::extension::get_static_lib_extension(),
-                        crate::project::kinds::ProjectType::DynamicLibrary => std::env::consts::DLL_EXTENSION.to_string(),
+                        crate::project::kinds::ProjectType::Executable => {
+                            std::env::consts::EXE_EXTENSION.to_string()
+                        }
+                        crate::project::kinds::ProjectType::StaticLibrary => {
+                            crate::util::extension::get_static_lib_extension()
+                        }
+                        crate::project::kinds::ProjectType::DynamicLibrary => {
+                            std::env::consts::DLL_EXTENSION.to_string()
+                        }
                         crate::project::kinds::ProjectType::Super => "none".to_string(),
-                    }.as_str()].join("");
+                    }
+                    .as_str(),
+                ]
+                .join("");
             }
         }
 
