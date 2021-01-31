@@ -1,0 +1,19 @@
+language: rust
+rust:
+  - stable
+  - beta
+  - nightly
+
+jobs:
+  allow_failures:
+    - rust: nightly
+    - rust: beta
+
+  fast_finish: true
+
+os:
+  - linux
+  - osx
+  - windows
+
+cache: cargo
