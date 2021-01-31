@@ -1,5 +1,5 @@
 use crate::project;
-use crate::project::build::{BuildPool};
+use crate::project::build::BuildPool;
 use crate::project::Project;
 
 pub fn build_subcommand() {

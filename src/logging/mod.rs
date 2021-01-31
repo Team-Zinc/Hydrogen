@@ -9,8 +9,10 @@ pub fn init() {
     let file_config: fern::Dispatch = get_file_config();
     file_config.apply().expect("Failed to create file logger.");
 
-    info!("\n\n\n\t ---- NEW RUN OF HYDROGEN: {} ----",
-        chrono::Local::now().format("%Y-%m-%d %H:%M:%S"));
+    info!(
+        "\n\n\n\t ---- NEW RUN OF HYDROGEN: {} ----",
+        chrono::Local::now().format("%Y-%m-%d %H:%M:%S")
+    );
 }
 
 fn get_file_config() -> fern::Dispatch {

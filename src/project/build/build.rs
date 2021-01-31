@@ -1,12 +1,12 @@
-use super::{link, project, BuildPool, BuiltJob, ConfigurePool, BuildError};
-use crate::project::build::language::Language;
+use super::{link, project, BuildError, BuildPool, BuiltJob, ConfigurePool};
 use crate::project::build::configure::BuildContext;
+use crate::project::build::language::Language;
 use project::Project;
 
+use log::{debug, error, info, trace};
 use snafu::ResultExt;
 use std::env;
 use std::path::{Path, PathBuf};
-use log::{debug, info, error, trace};
 
 impl<'a> BuildPool<'a> {
     pub fn go(&mut self) -> Result<(), Box<dyn std::error::Error>> {
@@ -50,7 +50,7 @@ impl<'a> BuildPool<'a> {
                     tell_failure!("Stopping due to above error(s)....");
 
                     error!("Failed to build project: {}", job.get_failure_description());
-                    
+
                     if job.build_result.is_err() {
                         return job.build_result;
                     } else if job.link_result.is_err() {
@@ -59,7 +59,10 @@ impl<'a> BuildPool<'a> {
                 }
 
                 tell_success!("{}\n", &job.get_success_description());
-                info!("Project built successfully: {}\n\n", job.get_success_description());
+                info!(
+                    "Project built successfully: {}\n\n",
+                    job.get_success_description()
+                );
 
                 self.built.push(job);
             }
@@ -83,7 +86,7 @@ fn build_and_link_files<'a>(
     j: &mut BuiltJob,
 ) -> Result<Option<BuildContext>, Box<dyn std::error::Error>> {
     let mut objs: Vec<PathBuf> = Vec::new();
-    let mut context: Option<BuildContext> = None; 
+    let mut context: Option<BuildContext> = None;
 
     if let Some(ref files) = p.get_files() {
         for file in files {
@@ -117,19 +120,19 @@ fn build_and_link_files<'a>(
 
         out = link.unwrap().unwrap();
         match meta.element.type_of {
-            project::kinds::ProjectType::Executable => {},
+            project::kinds::ProjectType::Executable => {}
             project::kinds::ProjectType::StaticLibrary => {
                 context = Some(BuildContext::from_static_lib(out));
-            },
+            }
             project::kinds::ProjectType::DynamicLibrary => {
                 context = Some(BuildContext::from_dynamic_lib(out));
-            },
-            project::kinds::ProjectType::Super => {},
+            }
+            project::kinds::ProjectType::Super => {}
         }
     }
 
     Ok(context)
-} 
+}
 
 fn build_file(
     file: &PathBuf,
@@ -149,8 +152,11 @@ fn build_file(
         }
     };
 
-    debug!("Using the {:?} configuration and compilation backend {}.",
-        lang, lang.get_backend_name());
+    debug!(
+        "Using the {:?} configuration and compilation backend {}.",
+        lang,
+        lang.get_backend_name()
+    );
     lang.get_configurer()(file, p)?;
     lang.get_builder()(file, p)?;
 

@@ -46,12 +46,16 @@ pub fn build_file(f: &PathBuf, p: &ConfigurePool) -> Result<(), Box<dyn std::err
     obj.set_extension("o");
     command.add_args(&[f.to_str().unwrap(), "-c", "-o", obj.to_str().unwrap()]);
 
-    debug!("Running command:\n`{} {:?}`", command.program.display(), command.args);
+    debug!(
+        "Running command:\n`{} {:?}`",
+        command.program.display(),
+        command.args
+    );
 
     command.log_command = false;
     let out = command.disable_check().run(); // This should never fail "e.g. exec not found", so we can unwrap.
     if !out.unwrap().status.success() {
-        return Err(Box::from(BuildError::CompilerError{}));
+        return Err(Box::from(BuildError::CompilerError {}));
     }
 
     Ok(())

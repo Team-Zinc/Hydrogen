@@ -24,11 +24,11 @@ pub enum BuildError {
 
     #[snafu(visibility(pub(crate)))]
     #[snafu(display("Compiler returned as failure"))]
-    CompilerError { },
+    CompilerError {},
 
     #[snafu(visibility(pub(crate)))]
     #[snafu(display("Linker/archiver returned as failure"))]
-    LinkerError { },
+    LinkerError {},
 }
 
 /// This struct holds a future of
