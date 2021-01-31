@@ -7,7 +7,10 @@ use log::debug;
 use std::path::PathBuf;
 
 use super::super::kinds::ProjectType;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 01f6c2494ac5bd90b98f5797f796ad31592f4cc5
 use super::{ConfigurePool, Project};
 
 use command_run::Command;
