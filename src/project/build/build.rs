@@ -50,7 +50,7 @@ impl<'a> BuildPool<'a> {
                     tell_failure!("Stopping due to above error(s)....");
 
                     error!("Failed to build project: {}", job.get_failure_description());
-                    
+
                     if job.build_result.is_err() {
                         return job.build_result;
                     } else if job.link_result.is_err() {
