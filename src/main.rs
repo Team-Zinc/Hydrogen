@@ -3,12 +3,12 @@ mod util;
 mod build;
 mod cats; // I implore you to explore.....
 mod cli;
-mod project; 
 mod logging;
+mod project;
 
+use log::{info, trace};
 use rand::seq::SliceRandom;
 use structopt::StructOpt;
-use log::{info, trace};
 
 /// Entry point.
 fn main() {

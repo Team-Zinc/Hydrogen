@@ -1,5 +1,5 @@
-use crate::project::Project;
 use crate::project::build::link::*;
+use crate::project::Project;
 
 use serde::{Deserialize, Serialize};
 
@@ -35,7 +35,7 @@ impl Default for ProjectType {
 }
 
 impl ProjectType {
-    pub fn get_type_link_flags(&self) -> Option<Box<dyn Fn(&Project) -> Vec<String>>>{
+    pub fn get_type_link_flags(&self) -> Option<Box<dyn Fn(&Project) -> Vec<String>>> {
         match self {
             ProjectType::Executable => Some(Box::from(exe::get_link_flags)),
             ProjectType::StaticLibrary => Some(Box::from(stlib::get_link_flags)),
@@ -44,7 +44,7 @@ impl ProjectType {
         }
     }
 
-    pub fn get_type_output_file(&self) -> Option<Box<dyn Fn(&Project) -> String>>{
+    pub fn get_type_output_file(&self) -> Option<Box<dyn Fn(&Project) -> String>> {
         match self {
             ProjectType::Executable => Some(Box::from(exe::get_output_file)),
             ProjectType::StaticLibrary => Some(Box::from(stlib::get_output_file)),
@@ -53,7 +53,7 @@ impl ProjectType {
         }
     }
 
-    pub fn get_type_output_flags(&self) -> Option<Box<dyn Fn(&str) -> Vec<&str>>>{
+    pub fn get_type_output_flags(&self) -> Option<Box<dyn Fn(&str) -> Vec<&str>>> {
         match self {
             ProjectType::Executable => Some(Box::from(exe::get_output_flags)),
             ProjectType::StaticLibrary => Some(Box::from(stlib::get_output_flags)),

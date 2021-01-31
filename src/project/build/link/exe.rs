@@ -6,7 +6,7 @@ pub fn get_output_flags(o: &str) -> Vec<&str> {
 
 pub fn get_link_flags(p: &Project) -> Vec<String> {
     let mut flags: Vec<String> = Vec::new();
-    
+
     if let Some(ref real) = p.real_actual {
         if let Some(ref deps) = real.dependencies {
             flags.push("-L./target/".to_owned());
@@ -18,10 +18,7 @@ pub fn get_link_flags(p: &Project) -> Vec<String> {
                     continue;
                 }
                 // We have us a local dependency
-                flags.push([
-                    "-l",
-                    dep.name.replace("lib", "").as_str()
-                ].join(""));
+                flags.push(["-l", dep.name.replace("lib", "").as_str()].join(""));
             }
         }
     }
@@ -31,8 +28,10 @@ pub fn get_link_flags(p: &Project) -> Vec<String> {
     }
 
     let mut base = vec![
-        "-execute".into(), "-lm".into(),
-        "-arch".into(), std::env::consts::ARCH.into()
+        "-execute".into(),
+        "-lm".into(),
+        "-arch".into(),
+        std::env::consts::ARCH.into(),
     ];
     base.append(&mut flags);
 
