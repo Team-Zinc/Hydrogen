@@ -1,14 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-
-use super::{ConfigurePool};
-=======
 use super::ConfigurePool;
->>>>>>> 01f6c2494ac5bd90b98f5797f796ad31592f4cc5
-=======
-use super::ConfigurePool;
->>>>>>> 01f6c2494ac5bd90b98f5797f796ad31592f4cc5
 use crate::project::build::language::Language;
 
 impl ConfigurePool {
