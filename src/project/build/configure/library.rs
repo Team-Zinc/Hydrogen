@@ -38,7 +38,11 @@ impl ConfigurePool {
         };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         if let Some(_external) = lib.external {
+=======
+        if let Some(ref _external) = lib.external {
+>>>>>>> 01f6c2494ac5bd90b98f5797f796ad31592f4cc5
 =======
         if let Some(ref _external) = lib.external {
 >>>>>>> 01f6c2494ac5bd90b98f5797f796ad31592f4cc5

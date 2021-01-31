@@ -1,5 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 use super::configure::{ConfigurePool};
+=======
+use super::configure::ConfigurePool;
+>>>>>>> 01f6c2494ac5bd90b98f5797f796ad31592f4cc5
 =======
 use super::configure::ConfigurePool;
 >>>>>>> 01f6c2494ac5bd90b98f5797f796ad31592f4cc5

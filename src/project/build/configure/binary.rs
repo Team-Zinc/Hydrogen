@@ -1,10 +1,15 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 use super::{ConfigureError, ConfigurePool};
 
 
 
+=======
+use super::{ConfigureError, ConfigurePool};
+
+>>>>>>> 01f6c2494ac5bd90b98f5797f796ad31592f4cc5
 =======
 use super::{ConfigureError, ConfigurePool};
 
