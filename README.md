@@ -12,7 +12,7 @@ Instead, Hydrogen uses a internal struct!
 To download Hydrogen, simply download the zip or clone the repository. As of now, the crates.io page is not being updated regularly, so that build may be very old.
 
 ## Building
-[![Build Status](https://travis-ci.com/Team-Zinc/Hydrogen.svg?branch=master)](https://travis-ci.com/Team-Zinc/Hydrogen) 
+[![Build Status](https://travis-ci.com/Team-Zinc/Hydrogen.svg?branch=master)](https://travis-ci.com/Team-Zinc/Hydrogen)  
 To build Hydrogen, simply download the latest Rust toolchain from rustup.rs, and run:
 ```bash
 cargo build --release
