@@ -1,9 +1,23 @@
-# Hydrogen
+![maintenance-status](https://img.shields.io/badge/maintenance-actively--developed-brightgreen.svg) [![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/Team-Zinc/Hydrogen/blob/master/LICENSE) [![GitHub Release](https://img.shields.io/github/release/tterb/PlayMusic.svg?style=flat)]()
+
+# Hydrogen 
 A build system that is nice to use.
 
 ## What is Hydrogen?
 Glad you asked! Hydrogen is a build system... *for the modern world*! Hydrogen doesn't use an obvious intermediate stage, like a Makefile (like, ugh, CMake).
 Instead, Hydrogen uses a internal struct!
+
+## Download
+[![Github All Releases](https://img.shields.io/github/downloads/Team-Zinc/Hydrogen/total.svg?style=flat)]()  
+To download Hydrogen, simply download the zip or clone the repository. As of now, the crates.io page is not being updated regularly, so that build may be very old.
+
+## Building
+[![Build Status](https://travis-ci.com/Team-Zinc/Hydrogen.svg?branch=master)](https://travis-ci.com/Team-Zinc/Hydrogen)  
+To build Hydrogen, simply download the latest Rust toolchain from rustup.rs, and run:
+```bash
+cargo build --release
+# Then install however you see fit
+```
 
 ## Why did I feel the need to make *yet another* build system?
 I was going to write a poem, and then I realized rhyming is hard. Who knew?
